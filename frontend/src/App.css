@@ -1,0 +1,301 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+
+body {
+    margin: 0;
+    background-color: #f3f6fc;
+    font-family: "Lato", sans-serif;
+}
+
+/* Smart Parking heading */
+#smart_parking_txt {
+    text-align: center;
+    margin-top: 20px;
+    color: #008cff;
+    font-family: "Lato", sans-serif;
+}
+
+/* Login Card */
+.login_card {
+    width: 400px;
+    height: 500px;
+    margin: 100px auto;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    font-family: "Lato", sans-serif;
+}
+
+/* User image */
+#login_img {
+    display: block;
+    width: 60px;
+    height: 60px;
+    margin: 30px auto 0;
+}
+
+/* Login heading */
+#login_txt {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #000;
+    font-family: "Lato", sans-serif;
+    font-weight: bold;
+}
+
+/* Welcome message */
+#wel_txt {
+    text-align: center;
+    font-size: 15px;
+    font-weight: normal;
+    margin-top: 30px;
+    margin-bottom: 0;
+    color: #777;
+    line-height: 1.5;
+    word-spacing: 0.1px;
+    letter-spacing: 0.5px;
+}
+
+/* email wrapper */
+.login_card > div:first-of-type {
+    position: relative;
+    width: 80%;
+    margin: 45px auto 0;
+}
+
+/* email input */
+#email_entry {
+    display: block;
+    width: 100%;
+    height: 50px;
+    padding: 0 45px;
+    box-sizing: border-box;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: "Lato", sans-serif;
+    font-size: 15px;
+    color: #333;
+    outline: none;
+    line-height: 50px;
+    transition: all 0.25s ease;
+}
+
+/* Mail icon */
+#mail_img {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    z-index: 2;
+}
+
+/* email focus */
+#email_entry:focus {
+    border-color: #008cff;
+    box-shadow: 0 0 8px rgba(0, 140, 255, 0.25);
+    transform: scale(1.02);
+}
+
+/* Password wrapper */
+.password_box {
+    position: relative;
+    width: 80%;
+    margin: 18px auto 0;
+}
+
+/* Password input */
+#password_entry {
+    display: block;
+    width: 100%;
+    height: 50px;
+    padding: 0 45px;
+    box-sizing: border-box;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: "Lato", sans-serif;
+    font-size: 15px;
+    color: #333;
+    outline: none;
+    line-height: 50px;
+    transition: all 0.25s ease;
+}
+
+/* Password focus */
+#password_entry:focus {
+    border-color: #008cff;
+    box-shadow: 0 0 8px rgba(0, 140, 255, 0.25);
+    transform: scale(1.02);
+}
+
+/* Placeholder */
+#email_entry::placeholder,
+#password_entry::placeholder {
+    color: #999;
+    opacity: 1;
+}
+
+/* Lock icon */
+#lock_img {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    z-index: 2;
+}
+
+/* Eye button */
+.eye_btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    padding: 5px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+/* Eye icon */
+.eye_img {
+    display: block;
+    width: 20px;
+    height: 20px;
+}
+
+/* Login button */
+#login_btn {
+    display: block;
+    width: 80%;
+    height: 45px;
+    margin: 30px auto 0;
+    background-color: #008cff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: "Lato", sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+    transition: all 0.25s ease;
+}
+
+/* Login button hover */
+#login_btn:hover {
+    background-color: #006dcc;
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 140, 255, 0.4);
+}
+
+/* Login button click */
+#login_btn:active {
+    transform: translateY(1px) scale(0.98);
+}
+#signup_txt {
+    text-align: center;
+    font-size: 15px;
+    font-weight: normal;
+    margin-top: 20px;
+    color: #777;
+    word-spacing: 0.1px;
+    letter-spacing: 0.5px;
+}
+#signup_img {
+    display: block;
+    width: 60px;
+    height: 60px;
+    margin: 30px auto 0;
+}
+
+#signup_txt {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #000;
+}
+
+
+/* Signup input container */
+.signup_box {
+    position: relative;
+    width: 80%;
+    margin: 18px auto 0;
+}
+
+/* Signup inputs */
+#name_input,
+#email_input,
+#phone_input {
+    display: block;
+    width: 100%;
+    height: 50px;
+    padding: 0 45px;
+    box-sizing: border-box;
+
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
+    font-family: "Lato", sans-serif;
+    font-size: 15px;
+    color: #333;
+    outline: none;
+
+    transition: all 0.25s ease;
+}
+
+/* Icons */
+.signup_box img {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 20px;
+    height: 20px;
+}
+
+/* Focus effect */
+#name_input:focus,
+#email_input:focus,
+#phone_input:focus {
+    border-color: #008cff;
+    box-shadow: 0 0 8px rgba(0, 140, 255, 0.25);
+    transform: scale(1.02);
+}
+
+/* Placeholder */
+#name_input::placeholder,
+#email_input::placeholder,
+#phone_input::placeholder {
+    color: #999;
+    opacity: 1;
+}
+#signup_link {
+    text-align: center;
+    font-size: 15px;
+    font-weight: normal;
+    color: #777;
+    margin-top: 20px;
+    word-spacing: 0.1px;
+    letter-spacing: 0.5px;
+}
+.signup_card {
+    width: 400px;
+    height: 600px;
+    margin: 100px auto;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    font-family: "Lato", sans-serif;
+}
