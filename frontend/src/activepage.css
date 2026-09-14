@@ -1,0 +1,230 @@
+body {
+    margin: 0;
+    background-color: #f3f6fc;
+    font-family: "Lato", sans-serif;
+}
+
+#dashboard_txt {
+    margin: 20px 0 0;
+    text-align: center;
+    font-size: 40px;
+    font-weight: 700;
+    color: #111;
+}
+
+#welcomde_txt {
+    margin: 0;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 400;
+    color: #222;
+}
+
+.cards_container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 30px;
+    margin-top: 35px;
+    padding: 0 30px;
+    box-sizing: border-box;
+}
+
+.availablespace,
+.mybookings,
+.mylands {
+    position: relative;
+    flex: 1;
+    max-width: 370px;
+    height: 235px;
+    padding: 35px;
+    box-sizing: border-box;
+    border-radius: 20px;
+    background-color: white;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.10);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.availablespace:hover,
+.mybookings:hover,
+.mylands:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 15px 32px rgba(0, 0, 0, 0.16);
+}
+
+.availablespace img,
+.mybookings img,
+.mylands img {
+    position: absolute;
+    left: 35px;
+    top: 45px;
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.availablespace h2,
+.mybookings h2,
+.mylands h2 {
+    position: absolute;
+    left: 115px;
+    right: 25px;
+    top: 45px;
+    margin: 0;
+    color: #333;
+    font-size: 22px;
+    line-height: 1.25;
+    font-weight: 700;
+}
+
+.availablespace h1,
+.mybookings h1,
+.mylands h1 {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 145px;
+    margin: 0;
+    text-align: center;
+    color: #222;
+    font-size: 38px;
+    line-height: 1;
+    font-weight: 400;
+}
+
+.map_container {
+    position: fixed;
+    left: 7%;
+    right: 2%;
+    bottom: 20px;
+    height: 40%;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    z-index: 1;
+    cursor: pointer;
+    transition: height 0.4s ease;
+}
+
+.map_container.expanded {
+    left: 7%;
+    right: 2%;
+    bottom: 20px;
+    height: 70%;
+    z-index: 99;
+}
+
+.map {
+    width: 100%;
+    height: 100%;
+}
+
+.find_parking_card,
+.add_land_card,
+.mybookings_card,
+.mylands_card,
+.profile_card,
+.logout_card {
+    width: 80%;
+    min-height: 300px;
+    margin: 80px auto;
+    padding: 40px;
+    box-sizing: border-box;
+    border-radius: 20px;
+    background-color: white;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.10);
+    text-align: center;
+}
+
+.find_parking_card h1,
+.add_land_card h1,
+.mybookings_card h1,
+.mylands_card h1,
+.profile_card h1,
+.logout_card h1 {
+    font-size: 32px;
+    color: #222;
+}
+
+#car_img,
+#land_img,
+#mybookings_img,
+#mylands_img,
+#profile_img,
+#logout_img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+}
+
+@media (max-width: 1000px) {
+    .cards_container {
+        flex-wrap: wrap;
+    }
+
+    .availablespace,
+    .mybookings,
+    .mylands {
+        flex: 0 1 370px;
+    }
+}
+
+@media (max-width: 700px) {
+    .cards_container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .availablespace,
+    .mybookings,
+    .mylands {
+        width: 90%;
+        max-width: 370px;
+    }
+
+    .map_container {
+        left: 5%;
+        right: 5%;
+        height: 35%;
+    }
+
+    .map_container.expanded {
+        left: 5%;
+        right: 5%;
+        height: 65%;
+    }
+}
+
+@media (max-width: 500px) {
+    #dashboard_txt {
+        font-size: 32px;
+    }
+
+    #welcomde_txt {
+        font-size: 19px;
+    }
+
+    .cards_container {
+        padding: 0 15px;
+    }
+
+    .availablespace,
+    .mybookings,
+    .mylands {
+        width: 100%;
+        height: 200px;
+    }
+
+    .map_container {
+        left: 3%;
+        right: 3%;
+        height: 30%;
+    }
+
+    .map_container.expanded {
+        left: 3%;
+        right: 3%;
+        height: 65%;
+    }
+}

@@ -21,9 +21,9 @@ function Login_card() {
         <>
         
 
-            <h1 id = "smart_parking_txt">Smart Parking</h1>
+            <h1 id = "smart_parking_txt">Park Nest</h1>
             <div className="login_card">
-
+ 
 
                 <img src = {login_img} alt="Login_img" id = "login_img"></img>
                 <h1 id = "login_txt">Login</h1>

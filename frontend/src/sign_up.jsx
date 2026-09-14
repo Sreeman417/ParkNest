@@ -11,10 +11,10 @@ import hide from "./assets/hide.png";
 function Signup_card() {
     const [showpass, setShowpass] = useState(false);
     const [password, setPassword] = useState("");
-
+ 
     return (
         <>
-            <h1 id="smart_parking_txt">Smart Parking</h1>
+            <h1 id="smart_parking_txt">Park Nest</h1>
 
             <div className="signup_card">
 
