@@ -1,6 +1,27 @@
 @import "leaflet/dist/leaflet.css";
 
+* {
+    box-sizing: border-box;
+}
 
+html,
+body,
+#root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    font-family: "Lato", sans-serif;
+    background-color: #f3f6fc;
+}
+
+#root {
+    width: 100%;
+    max-width: 100%;
+}
 body {
     margin: 0;
     background-color: #f3f6fc;
@@ -124,4 +145,19 @@ body {
 .logout_btn {
     margin-top: 25px;
     border-bottom: none;
+}
+.page_transition {
+    animation: pageEnter 0.35s ease;
+}
+
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

@@ -1,6 +1,14 @@
-body {
+html,
+body,
+#root {
     margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
     background-color: #f3f6fc;
+}
+
+body {
     font-family: "Lato", sans-serif;
 }
 
@@ -21,29 +29,29 @@ body {
 }
 
 .cards_container {
-    width: 100%;
+    width: 1200px;
+    max-width: calc(100% - 60px);
     display: flex;
     justify-content: center;
     align-items: stretch;
     gap: 30px;
-    margin-top: 35px;
-    padding: 0 30px;
-    box-sizing: border-box;
+    margin: 35px auto 0;
 }
 
 .availablespace,
 .mybookings,
 .mylands {
     position: relative;
-    flex: 1;
-    max-width: 370px;
+    width: 370px;
     height: 235px;
+    flex: 0 0 370px;
     padding: 35px;
     box-sizing: border-box;
     border-radius: 20px;
     background-color: white;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.10);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
 }
 
 .availablespace:hover,
@@ -95,24 +103,22 @@ body {
 
 .map_container {
     position: fixed;
-    left: 7%;
-    right: 2%;
+    left: 50%;
+    transform: translateX(-50%);
     bottom: 20px;
+    width: 1200px;
+    max-width: calc(100% - 60px);
     height: 40%;
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
     z-index: 1;
-    cursor: pointer;
     transition: height 0.4s ease;
 }
 
-.map_container.expanded {
-    left: 7%;
-    right: 2%;
-    bottom: 20px;
+.map_container:hover {
     height: 70%;
-    z-index: 99;
+    z-index: 2;
 }
 
 .map {
@@ -184,14 +190,12 @@ body {
     }
 
     .map_container {
-        left: 5%;
-        right: 5%;
+        width: 90%;
+        max-width: none;
         height: 35%;
     }
 
-    .map_container.expanded {
-        left: 5%;
-        right: 5%;
+    .map_container:hover {
         height: 65%;
     }
 }
@@ -217,14 +221,11 @@ body {
     }
 
     .map_container {
-        left: 3%;
-        right: 3%;
+        width: 94%;
         height: 30%;
     }
 
-    .map_container.expanded {
-        left: 3%;
-        right: 3%;
+    .map_container:hover {
         height: 65%;
     }
 }

@@ -7,15 +7,35 @@ import lock from "./assets/padlock.png";
 import {useState} from "react";
 import {Link} from "react-router-dom";
 function Login_card() {
-    /* setshowpass(of some value sets the value to showpass)*/
     const[showpass, setShowpass] = useState(false);
     const[email, setemail] = useState("");
+    const [error, setError] = useState("");
     const[password, setPassword] = useState("");
-    const handleLogin = () => {
-        /*login here*/
-        console.log("email: " + email);
-        console.log("password: " + password);
-    }
+    const handleLogin = async () => {
+        try {
+            const response = await fetch("http://127.0.0.1:8000/login", {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
+            const data = await response.json();
+            if(data.detail == "ok"){
+                setError("")
+            }
+            else{
+                setError(data.detail);
+            }
+            return;
+        } catch (err) {
+            console.error("Network error:", err);
+        }
+    };
+
     
     return(
         <>
@@ -46,11 +66,12 @@ function Login_card() {
 
 
                 <button id="login_btn" onClick={() => handleLogin()}>Login</button>
+                
                 <h1 id = "signup_link">Dont have an account? <Link to="/signup">Sign up</Link></h1>
 
 
             </div>
-
+            {error ? <h1 id = "error_txt">{error}</h1>:null}
         </>
     );
 }
