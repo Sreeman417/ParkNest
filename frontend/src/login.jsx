@@ -5,12 +5,13 @@ import show from "./assets/show.png";
 import mail from "./assets/mail.png";
 import lock from "./assets/padlock.png";
 import {useState} from "react";
-import {Link} from "react-router-dom";
+import {Link,useNavigate} from "react-router-dom";
 function Login_card() {
     const[showpass, setShowpass] = useState(false);
     const[email, setemail] = useState("");
     const [error, setError] = useState("");
     const[password, setPassword] = useState("");
+    const navigate = useNavigate();
     const handleLogin = async () => {
         try {
             const response = await fetch("http://127.0.0.1:8000/login", {
@@ -26,6 +27,7 @@ function Login_card() {
             const data = await response.json();
             if(data.detail == "ok"){
                 setError("")
+                navigate("/dashboard");
             }
             else{
                 setError(data.detail);

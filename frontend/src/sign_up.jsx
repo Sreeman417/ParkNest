@@ -11,7 +11,38 @@ import hide from "./assets/hide.png";
 function Signup_card() {
     const [showpass, setShowpass] = useState(false);
     const [password, setPassword] = useState("");
- 
+    const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
+    const [phone, setPhone] = useState("");
+    const [error, setError] = useState("");
+    const handleSignup = async () => {
+        try {
+            const response = await fetch("http://127.0.0.1:8000/signup", {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json" 
+                },
+                body: JSON.stringify({
+                    name: name,
+                    phone: phone,
+                    email: email,
+                    password: password
+                })
+            });
+            const data = await response.json();
+            if(data.detail == "ok"){
+                setError("")
+                return;
+            }
+            else{
+                setError(data.detail);
+            }
+            return;
+        } catch (err) {
+            console.error("Network error:", err);
+        }
+    };
+
     return (
         <>
             <h1 id="smart_parking_txt">Park Nest</h1>
@@ -28,6 +59,8 @@ function Signup_card() {
                         type="text"
                         placeholder="Full Name"
                         id="name_input"
+                        value = {name}
+                        onChange = {(e) => setName(e.target.value)}
                     />
                     <img src={user} alt="User Icon" />
                 </div>
@@ -37,6 +70,8 @@ function Signup_card() {
                         type="text"
                         placeholder="Phone Number"
                         id="phone_input"
+                        value = {phone}
+                        onChange = {(e) => setPhone(e.target.value)}
                     />
                     <img src={telephone} alt="Telephone Icon" />
                 </div>
@@ -46,6 +81,8 @@ function Signup_card() {
                         type="email"
                         placeholder="Email"
                         id="email_input"
+                        value = {email}
+                        onChange = {(e) => setEmail(e.target.value)}
                     />
                     <img src={mail} alt="Mail Icon" />
                 </div>
@@ -74,11 +111,12 @@ function Signup_card() {
                     </button>
                 </div>
 
-                <button id="login_btn">
+                <button id="login_btn" onClick={() => handleSignup()}>
                     Sign Up
                 </button>
 
             </div>
+            {error ? <h1 id = "error_txt">{error}</h1>:null}
         </>
     );
 }

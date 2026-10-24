@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 class userdata(BaseModel):
     name:str
-    phone:int
+    phone:str
     email:str
     password:str
 class logindata(BaseModel):
@@ -56,5 +56,22 @@ def login(data:logindata):
         return {"detail":"ok"}
     else:
         raise HTTPException(status_code=400,detail = "Incorrect password")
+@app.post("/signup")
+def signup(data:userdata):
+    if(data.name == "" or data.phone == "" or data.email == "" or data.password == ""):
+        raise HTTPException(status_code=400,detail = "Please fill all the fields")
+    elif(data.phone.isdigit() == False or len(data.phone) != 10):
+        raise HTTPException(status_code=400,detail = "Please enter a valid phone number")
+    elif("@" not in data.email):
+        raise HTTPException(status_code=400,detail="Please enter a proper mail id")
+    elif(password_checker(data.password) == False):
+        raise HTTPException(status_code=400,detail = "Password must contain atleast a cap,special,\nand more than 8 character")
+    else:
+        if(users.find_one({"email":data.email}) == None and users.find_one({"phone":data.phone}) == None):
+            users.insert_one({"name":data.name,"phone":data.phone,"email":data.email,"password":data.password})
+            return {"detail":"ok"}
+        elif(users.find_one({"phone":data.phone}) != None or users.find_one({"email":data.email}) != None):
+            raise HTTPException(status_code=400,detail = "Phone number or Email already exists")
+
 if __name__ == "__main__":
     uvicorn.run("main:app",host="127.0.0.1",port = 8000,reload=True)
