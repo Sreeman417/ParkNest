@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
-
+import random
 class userdata(BaseModel):
     name:str
     phone:str
@@ -21,6 +21,7 @@ m_url = os.getenv("m_url")
 client = MongoClient(m_url)
 db = client["parknest"]
 users = db["users"]
+profile = db["profile"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],
@@ -69,8 +70,13 @@ def signup(data:userdata):
         raise HTTPException(status_code=400,detail = "Password must contain atleast a cap,special,\nand more than 8 character")
     else:
         if(users.find_one({"email":data.email}) == None and users.find_one({"phone":data.phone}) == None):
-            users.insert_one({"name":data.name,"phone":data.phone,"email":data.email,"password":data.password})
-            return {"detail":"ok","name":curr_user["name"]}
+            otp = random.randrange(100000,999999)
+            
+            
+            
+            raise HTTPException(status_code=200,detail = "OTP sent")
+            """users.insert_one({"name":data.name,"phone":data.phone,"email":data.email,"password":data.password})
+            return {"detail":"ok","name":curr_user["name"]}"""
         elif(users.find_one({"phone":data.phone}) != None or users.find_one({"email":data.email}) != None):
             raise HTTPException(status_code=400,detail = "Phone number or Email already exists")
 

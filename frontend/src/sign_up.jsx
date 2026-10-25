@@ -113,7 +113,7 @@ function Signup_card() {
                 </div>
 
                 <button id="login_btn" onClick={() => handleSignup()}>
-                    Sign Up
+                   Send OTP
                 </button>
 
             </div>

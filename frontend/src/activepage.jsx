@@ -830,6 +830,7 @@ function MyLands() {
 }
 
 function Profile({ name = "" }) {
+
     const [profile, setProfile] = useState(() => readSaved("parknest_profile", {
         name,
         email: "",
@@ -853,6 +854,7 @@ function Profile({ name = "" }) {
         setMessage("Profile saved on this device.");
     };
 
+    
     return (
         <div className="page_shell">
             <div className="page_intro">
