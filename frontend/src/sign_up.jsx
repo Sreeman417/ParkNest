@@ -7,7 +7,7 @@ import signup from "./assets/user.png";
 import lock from "./assets/padlock.png";
 import show from "./assets/show.png";
 import hide from "./assets/hide.png";
-
+import {useNavigate} from "react-router-dom";
 function Signup_card() {
     const [showpass, setShowpass] = useState(false);
     const [password, setPassword] = useState("");
@@ -15,6 +15,7 @@ function Signup_card() {
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
     const [error, setError] = useState("");
+    const navigate = useNavigate();
     const handleSignup = async () => {
         try {
             const response = await fetch("http://127.0.0.1:8000/signup", {
@@ -32,7 +33,7 @@ function Signup_card() {
             const data = await response.json();
             if(data.detail == "ok"){
                 setError("")
-                return;
+                navigate("/dashboard",{state:{name:data.name}});
             }
             else{
                 setError(data.detail);

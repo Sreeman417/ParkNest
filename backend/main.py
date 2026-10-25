@@ -53,11 +53,12 @@ def login(data:logindata):
     elif(password_checker(curr_user["password"]) == False):
         raise HTTPException(status_code=400,detail = "Password must contain atleast a cap,special,\nand more than 8 character")    
     if(curr_user["password"] == data.password):
-        return {"detail":"ok"}
+        return {"detail":"ok","name":curr_user["name"]}
     else:
         raise HTTPException(status_code=400,detail = "Incorrect password")
 @app.post("/signup")
 def signup(data:userdata):
+    curr_user = users.find_one({"email":data.email})
     if(data.name == "" or data.phone == "" or data.email == "" or data.password == ""):
         raise HTTPException(status_code=400,detail = "Please fill all the fields")
     elif(data.phone.isdigit() == False or len(data.phone) != 10):
@@ -69,9 +70,10 @@ def signup(data:userdata):
     else:
         if(users.find_one({"email":data.email}) == None and users.find_one({"phone":data.phone}) == None):
             users.insert_one({"name":data.name,"phone":data.phone,"email":data.email,"password":data.password})
-            return {"detail":"ok"}
+            return {"detail":"ok","name":curr_user["name"]}
         elif(users.find_one({"phone":data.phone}) != None or users.find_one({"email":data.email}) != None):
             raise HTTPException(status_code=400,detail = "Phone number or Email already exists")
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app",host="127.0.0.1",port = 8000,reload=True)

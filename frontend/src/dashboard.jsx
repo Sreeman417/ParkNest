@@ -11,11 +11,11 @@ import userdash from "./assets/user_dash.png";
 import turnoff from "./assets/turn-off.png";
 import parknest from "./assets/parknest.png";
 import { Carddisp } from "./activepage.jsx";
-
+import {useLocation,useNavigate} from "react-router-dom";
 function Dashboard() {
     const [sidebar, setSidebar] = useState(false);
     const [activepage, setactivepage] = useState("dashboard");
-
+    const location = useLocation();
     function toggleSidebar() {
         setSidebar(!sidebar);
     }
@@ -102,15 +102,17 @@ function Dashboard() {
             />
 
         </div>
-    );
+    ); 
 }
 
 function Carddisplayer(props) {
+    const location = useLocation();
     return (
         <div className="page_transition">
             <Carddisp
                 page={props.page}
                 setactivepage={props.setactivepage}
+                name = {location.state.name}
             />
         </div>
     );

@@ -27,7 +27,7 @@ function Login_card() {
             const data = await response.json();
             if(data.detail == "ok"){
                 setError("")
-                navigate("/dashboard");
+                navigate("/dashboard",{state:{name:data.name}});
             }
             else{
                 setError(data.detail);
@@ -41,8 +41,6 @@ function Login_card() {
     
     return(
         <>
-        
-
             <h1 id = "smart_parking_txt">Park Nest</h1>
             <div className="login_card">
  
