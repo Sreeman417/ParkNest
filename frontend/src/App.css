@@ -336,3 +336,117 @@ body {
     0%   { opacity: 0; transform: translateX(-20px); }
     100% { opacity: 1; transform: translateX(0); }
 }
+
+.otp_card {
+    width: 400px;
+    min-height: 300px;
+    margin: 100px auto;
+    padding: 35px 30px;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.otp_card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 35px rgba(0, 140, 255, 0.18);
+}
+
+#otp_txt {
+    font-size: 28px;
+    color: #008cff;
+    margin: 0;
+    text-align: center;
+}
+
+.otp_card p {
+    margin: 0;
+    color: #666666;
+    font-size: 14px;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+#otp_input {
+    width: 100%;
+    height: 48px;
+    box-sizing: border-box;
+    padding: 12px 15px;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    outline: none;
+    font-size: 20px;
+    letter-spacing: 8px;
+    text-align: center;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#otp_input:focus {
+    border-color: #008cff;
+    box-shadow: 0 0 0 3px rgba(0, 140, 255, 0.12);
+}
+
+#verify_btn {
+    width: 100%;
+    height: 46px;
+    border: none;
+    border-radius: 8px;
+    background: #008cff;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease,
+        background 0.25s ease;
+}
+
+#verify_btn:hover {
+    background: #006fd6;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 140, 255, 0.25);
+}
+
+#verify_btn:active {
+    transform: scale(0.98);
+}
+
+#verify_btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+#error_txt {
+    max-width: 400px;
+    margin: -70px auto 30px;
+    color: #e53935;
+    font-size: 15px;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 480px) {
+    .otp_card {
+        width: calc(100% - 32px);
+        margin: 60px auto;
+        padding: 28px 22px;
+    }
+
+    #otp_txt {
+        font-size: 24px;
+    }
+
+    #error_txt {
+        width: calc(100% - 32px);
+        margin: -30px auto 24px;
+    }
+}
