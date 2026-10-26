@@ -7,10 +7,10 @@
 html,
 body,
 #root {
-    margin: 0;
-    padding: 0;
     width: 100%;
     min-height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 body {
@@ -19,15 +19,8 @@ body {
 }
 
 #root {
-    width: 100%;
     max-width: 100%;
 }
-body {
-    margin: 0;
-    background-color: #f3f6fc;
-    font-family: "Lato", sans-serif;
-}
-
 .menu_btn {
     position: fixed !important;
     top: 25px !important;

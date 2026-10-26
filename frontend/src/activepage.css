@@ -1,17 +1,44 @@
-```css
-html,
-body,
-#root {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100vh;
-    background: #f3f6fc;
+@import "leaflet/dist/leaflet.css";
+
+* {
+    box-sizing: border-box;
 }
 
-body {
-    font-family: "Lato", sans-serif;
+.page_shell {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 28px 32px;
+}
+
+.page_intro {
+    width: 100%;
+    margin: 0 0 24px;
+}
+
+.page_intro h1 {
+    margin: 8px 0;
+    font-size: 32px;
     color: #172033;
+}
+
+.page_intro h2,
+.page_intro p {
+    margin-top: 0;
+}
+
+.page_intro p,
+.muted_text,
+.demo_note {
+    color: #68758c;
+    line-height: 1.6;
+}
+
+.eyebrow {
+    color: #087fe7;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
 }
 
 #dashboard_txt {
@@ -31,11 +58,10 @@ body {
 }
 
 .cards_container {
-    width: 1200px;
-    max-width: calc(100% - 48px);
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 24px;
+    width: 100%;
     margin: 32px auto;
 }
 
@@ -43,9 +69,9 @@ body {
 .mybookings,
 .mylands {
     position: relative;
+    min-width: 0;
     min-height: 190px;
     padding: 28px;
-    box-sizing: border-box;
     border: 1px solid #e7ecf4;
     border-radius: 20px;
     background: #fff;
@@ -91,8 +117,7 @@ body {
 
 .map_container {
     position: relative;
-    width: 1200px;
-    max-width: calc(100% - 48px);
+    width: 100%;
     height: 350px;
     margin: 28px auto;
     border: 1px solid #e2e8f2;
@@ -112,17 +137,26 @@ body {
 .mybookings_card,
 .mylands_card,
 .profile_card,
-.logout_card {
-    width: 1200px;
-    max-width: calc(100% - 48px);
-    min-height: 220px;
-    margin: 36px auto;
-    padding: 32px;
-    box-sizing: border-box;
+.logout_card,
+.form_card,
+.calendar_card {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 24px;
     border: 1px solid #e7ecf4;
-    border-radius: 20px;
+    border-radius: 16px;
     background: #fff;
     box-shadow: 0 8px 25px rgba(30, 50, 90, 0.06);
+}
+
+.find_parking_card,
+.add_land_card,
+.mybookings_card,
+.mylands_card,
+.profile_card,
+.logout_card {
+    margin: 24px 0;
 }
 
 .find_parking_card h1,
@@ -174,16 +208,56 @@ body {
     box-shadow: 0 0 0 3px rgba(8, 127, 231, 0.1);
 }
 
+.parking_search button,
+.parking_card button,
+.primary_btn,
+.secondary_btn {
+    min-height: 44px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 11px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.parking_search button,
+.parking_card button,
+.primary_btn {
+    background: #087fe7;
+    color: #fff;
+}
+
+.parking_search button:hover,
+.parking_card button:hover,
+.primary_btn:hover {
+    background: #0669c2;
+    transform: translateY(-2px);
+}
+
+.secondary_btn {
+    width: 100%;
+    margin-top: 16px;
+    background: #eaf3ff;
+    color: #087fe7;
+}
+
+.secondary_btn:hover {
+    background: #d9eaff;
+}
+
 .parking_results {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 20px;
+    width: 100%;
     margin: 24px auto;
-    width: 1200px;
-    max-width: calc(100% - 48px);
 }
 
-.parking_card {
+.parking_card,
+.property_card {
+    min-width: 0;
     padding: 22px;
     border: 1px solid #e5eaf3;
     border-radius: 18px;
@@ -197,51 +271,48 @@ body {
     box-shadow: 0 12px 25px rgba(30, 50, 90, 0.1);
 }
 
-.parking_card h2 {
+.parking_card h2,
+.property_card h2 {
     margin: 12px 0 8px;
+    overflow-wrap: anywhere;
+    color: #172033;
     font-size: 19px;
 }
 
-.parking_card p {
+.parking_card p,
+.property_card p {
     margin: 8px 0;
     color: #68758c;
     line-height: 1.5;
+    overflow-wrap: anywhere;
 }
 
-.parking_price {
+.parking_price,
+.property_price {
     color: #087fe7 !important;
     font-size: 21px;
     font-weight: 700;
 }
 
-.parking_badge {
+.parking_badge,
+.status_active,
+.status_cancelled {
     display: inline-block;
     padding: 6px 10px;
     border-radius: 20px;
-    background: #e6f7ee;
-    color: #16784b;
     font-size: 12px;
     font-weight: 700;
 }
 
-.parking_card button,
-.parking_search button {
-    min-height: 44px;
-    padding: 0 18px;
-    border: none;
-    border-radius: 11px;
-    background: #087fe7;
-    color: #fff;
-    font: inherit;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
+.parking_badge,
+.status_active {
+    background: #e6f7ee;
+    color: #16784b;
 }
 
-.parking_card button:hover,
-.parking_search button:hover {
-    background: #0669c2;
-    transform: translateY(-1px);
+.status_cancelled {
+    background: #ffe9e7;
+    color: #b42318;
 }
 
 .empty_results {
@@ -252,118 +323,6 @@ body {
     background: #fff;
     border: 1px dashed #cbd5e5;
     border-radius: 16px;
-}
-
-@media (max-width: 1000px) {
-    .cards_container,
-    .parking_results {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
-@media (max-width: 700px) {
-    #dashboard_txt {
-        font-size: 32px;
-    }
-
-    #welcomde_txt {
-        padding: 0 16px;
-        font-size: 19px;
-    }
-
-    .cards_container,
-    .parking_results {
-        grid-template-columns: 1fr;
-        max-width: calc(100% - 32px);
-        gap: 16px;
-        margin-top: 24px;
-    }
-
-    .availablespace,
-    .mybookings,
-    .mylands {
-        min-height: 175px;
-    }
-
-    .find_parking_card,
-    .add_land_card,
-    .mybookings_card,
-    .mylands_card,
-    .profile_card,
-    .logout_card {
-        max-width: calc(100% - 32px);
-        margin: 24px auto;
-        padding: 22px;
-    }
-
-    .map_container {
-        max-width: calc(100% - 32px);
-        height: 300px;
-        margin: 20px auto;
-    }
-
-    .parking_search {
-        flex-direction: column;
-    }
-
-    .parking_search input,
-    .parking_search select,
-    .parking_search button {
-        width: 100%;
-        box-sizing: border-box;
-        flex: auto;
-    }
-}
-
-@media (max-width: 400px) {
-    #dashboard_txt {
-        font-size: 28px;
-    }
-
-    .availablespace,
-    .mybookings,
-    .mylands {
-        padding: 22px;
-    }
-}
-```
-.page_shell {
-    width: 1200px;
-    max-width: calc(100% - 48px);
-    margin: 32px auto;
-}
-
-.page_intro {
-    margin-bottom: 28px;
-}
-
-.page_intro h1 {
-    margin: 8px 0;
-    font-size: 32px;
-    color: #172033;
-}
-
-.page_intro p,
-.muted_text,
-.demo_note {
-    color: #68758c;
-    line-height: 1.6;
-}
-
-.eyebrow {
-    color: #087fe7;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-}
-
-.form_card,
-.calendar_card {
-    padding: 28px;
-    border: 1px solid #e5eaf3;
-    border-radius: 20px;
-    background: #fff;
-    box-shadow: 0 8px 25px rgba(30, 50, 90, 0.06);
 }
 
 .form_card h2,
@@ -391,9 +350,9 @@ body {
 .form_card textarea,
 .calendar_card input {
     width: 100%;
+    min-width: 0;
     min-height: 46px;
     padding: 12px;
-    box-sizing: border-box;
     border: 1px solid #dbe3ef;
     border-radius: 10px;
     outline: none;
@@ -450,39 +409,6 @@ body {
     accent-color: #087fe7;
 }
 
-.primary_btn,
-.secondary_btn {
-    min-height: 46px;
-    padding: 0 20px;
-    border: none;
-    border-radius: 11px;
-    font: inherit;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.primary_btn {
-    background: #087fe7;
-    color: #fff;
-}
-
-.primary_btn:hover {
-    background: #0669c2;
-    transform: translateY(-2px);
-}
-
-.secondary_btn {
-    width: 100%;
-    margin-top: 16px;
-    background: #eaf3ff;
-    color: #087fe7;
-}
-
-.secondary_btn:hover {
-    background: #d9eaff;
-}
-
 .success_message {
     color: #16784b;
     font-weight: 700;
@@ -496,7 +422,7 @@ body {
 
 .booking_layout {
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
     gap: 24px;
     align-items: start;
 }
@@ -507,8 +433,10 @@ body {
 
 .booking_estimate {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
+    gap: 12px;
     margin: 24px 0;
     padding: 18px;
     border-radius: 12px;
@@ -523,8 +451,10 @@ body {
 
 .calendar_header {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
     margin-bottom: 24px;
 }
 
@@ -554,7 +484,7 @@ body {
 }
 
 .section_heading {
-    margin: 28px auto 20px;
+    margin: 28px 0 20px;
 }
 
 .section_heading h2 {
@@ -576,6 +506,7 @@ body {
     display: flex;
     align-items: center;
     gap: 18px;
+    min-width: 0;
     padding: 20px;
     border: 1px solid #e5eaf3;
     border-radius: 16px;
@@ -626,24 +557,6 @@ body {
     gap: 10px;
 }
 
-.status_active,
-.status_cancelled {
-    padding: 6px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
-}
-
-.status_active {
-    background: #e6f7ee;
-    color: #16784b;
-}
-
-.status_cancelled {
-    background: #ffe9e7;
-    color: #b42318;
-}
-
 .text_btn {
     padding: 8px 0;
     border: none;
@@ -662,28 +575,8 @@ body {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 22px;
+    width: 100%;
     margin: 28px 0;
-}
-
-.property_card {
-    min-width: 0;
-    padding: 22px;
-    border: 1px solid #e5eaf3;
-    border-radius: 18px;
-    background: #fff;
-    box-shadow: 0 6px 20px rgba(30, 50, 90, 0.05);
-}
-
-.property_card h2 {
-    margin: 18px 0 8px;
-    overflow-wrap: anywhere;
-    color: #172033;
-    font-size: 20px;
-}
-
-.property_card p {
-    color: #68758c;
-    line-height: 1.5;
 }
 
 .property_card_top {
@@ -705,9 +598,7 @@ body {
 
 .property_price {
     margin: 16px 0;
-    color: #087fe7;
     font-size: 24px;
-    font-weight: 700;
 }
 
 .utility_tags {
@@ -744,6 +635,7 @@ body {
 
 .profile_avatar {
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
     width: 76px;
@@ -809,6 +701,7 @@ body {
 }
 
 .demo_note {
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 12px;
@@ -817,17 +710,17 @@ body {
 
 .utility_grid {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
-    width: 1200px;
-    max-width: calc(100% - 48px);
-    margin: 20px auto;
+    width: 100%;
+    margin: 20px 0;
 }
 
 .utility_chip {
     display: flex;
     flex-direction: column;
     gap: 6px;
+    min-width: 0;
     padding: 16px;
     border: 1px solid #e5eaf3;
     border-radius: 12px;
@@ -842,6 +735,7 @@ body {
 .utility_chip strong {
     color: #172033;
     font-size: 14px;
+    overflow-wrap: anywhere;
 }
 
 .logout_card {
@@ -854,6 +748,8 @@ body {
 }
 
 @media (max-width: 1000px) {
+    .cards_container,
+    .parking_results,
     .property_grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -862,33 +758,70 @@ body {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .utility_grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
     .booking_layout {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 }
 
 @media (max-width: 700px) {
     .page_shell {
-        max-width: calc(100% - 32px);
-        margin: 24px auto;
+        padding: 20px 16px;
     }
 
-    .page_intro h1 {
-        font-size: 28px;
+    #dashboard_txt {
+        font-size: 32px;
     }
 
+    #welcomde_txt {
+        padding: 0 16px;
+        font-size: 19px;
+    }
+
+    .cards_container,
+    .parking_results,
+    .property_grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+        margin-top: 24px;
+    }
+
+    .availablespace,
+    .mybookings,
+    .mylands {
+        min-height: 175px;
+        padding: 22px;
+    }
+
+    .find_parking_card,
+    .add_land_card,
+    .mybookings_card,
+    .mylands_card,
+    .profile_card,
+    .logout_card,
     .form_card,
     .calendar_card {
-        padding: 20px;
+        padding: 18px;
     }
 
-    .form_grid,
-    .property_grid {
-        grid-template-columns: 1fr;
+    .map_container {
+        height: 300px;
+        margin: 20px auto;
+    }
+
+    .parking_search {
+        flex-direction: column;
+    }
+
+    .parking_search input,
+    .parking_search select,
+    .parking_search button {
+        width: 100%;
+        min-width: 0;
+        flex: auto;
+    }
+
+    .form_grid {
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .full_field {
@@ -907,13 +840,12 @@ body {
     .booking_actions {
         flex-direction: row;
         align-items: center;
-        width: 100%;
         justify-content: space-between;
+        width: 100%;
     }
 
     .utility_grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        max-width: calc(100% - 32px);
     }
 
     .map_legend {
@@ -926,12 +858,20 @@ body {
         align-items: flex-start;
         flex-direction: column;
     }
+
+    .page_intro h1 {
+        font-size: 28px;
+    }
 }
 
 @media (max-width: 400px) {
+    #dashboard_txt {
+        font-size: 28px;
+    }
+
     .checkbox_grid,
     .utility_grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .booking_date {
@@ -942,88 +882,12 @@ body {
         font-size: 25px;
     }
 }
-.page_shell {
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 28px 32px;
-    box-sizing: border-box;
-}
 
-.page_intro {
-    width: 100%;
-    margin: 0 0 24px;
-}
-
-.page_intro h1,
-.page_intro h2,
-.page_intro p {
-    margin-top: 0;
-}
-
-.form_card,
-.calendar_card,
-.booking_card,
-.property_card,
-.profile_card,
-.logout_card {
-    box-sizing: border-box;
-    width: 100%;
-    min-width: 0;
-}
-
-.form_grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-}
-
-.property_grid,
-.utility_grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px;
-    width: 100%;
-}
-
-.form_card input,
-.form_card select,
-.form_card textarea {
-    width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-}
-
-.form_card,
-.calendar_card,
-.profile_card,
-.logout_card {
-    padding: 24px;
-    border-radius: 16px;
-}
-
-@media (max-width: 900px) {
-    .property_grid,
-    .utility_grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
-@media (max-width: 600px) {
-    .page_shell {
-        padding: 20px 16px;
-    }
-
-    .form_grid,
-    .property_grid,
-    .utility_grid {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .form_card,
-    .calendar_card,
-    .profile_card,
-    .logout_card {
-        padding: 18px;
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
     }
 }

@@ -1,78 +1,126 @@
+
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import "./App.css";
-import login_img from "./assets/user.png";
-import hide from "./assets/hide.png";
-import show from "./assets/show.png";
+import loginImage from "./assets/user.png";
 import mail from "./assets/mail.png";
 import lock from "./assets/padlock.png";
-import {useState} from "react";
-import {Link,useNavigate} from "react-router-dom";
+import show from "./assets/show.png";
+import hide from "./assets/hide.png";
+
 function Login_card() {
-    const[showpass, setShowpass] = useState(false);
-    const[email, setemail] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [showpass, setShowpass] = useState(false);
     const [error, setError] = useState("");
-    const[password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
     const handleLogin = async () => {
+        setLoading(true);
         try {
             const response = await fetch("http://127.0.0.1:8000/login", {
                 method: "POST",
                 headers: {
-                    "content-type": "application/json"
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    email: email,
-                    password: password
+                    email: email.trim(),
+                    password:password
                 })
             });
             const data = await response.json();
-            if(data.detail == "ok"){
-                setError("")
-                navigate("/dashboard",{state:{name:data.name}});
+            if (data.token) {
+                localStorage.setItem("token", data.token);
+                navigate("/dashboard");
             }
-            else{
-                setError(data.detail);
+            else {
+                setError(data.detail || "Login failed");
             }
-            return;
-        } catch (err) {
-            console.error("Network error:", err);
+        }
+        catch (err) {
+            console.error("Error during login:", err);
+        }
+        finally {
+            setLoading(false);
         }
     };
 
-    
-    return(
-        <>
-            <h1 id = "smart_parking_txt">Park Nest</h1>
-            <div className="login_card">
- 
+    return (
+        <main className="auth_page">
+            <h1 className="brand_title">Park Nest</h1>
 
-                <img src = {login_img} alt="Login_img" id = "login_img"></img>
-                <h1 id = "login_txt">Login</h1>
-                <h1 id = "wel_txt">Welcome back! Please login to your account.</h1>
+            <section className="auth_content">
+                <div className="auth_card">
+                    <img
+                        src={loginImage}
+                        alt="User"
+                        className="auth_avatar"
+                    />
 
+                    <h2 className="auth_title">Login</h2>
+                    <p className="auth_subtitle">
+                        Welcome back! Please log in to your account.
+                    </p>
 
-                <div>
-                    <input value = {email} onChange = {(e) => setemail(e.target.value)} id = "email_entry" type="email" placeholder="Email" />
-                    <img src = {mail} alt="mail" id = "mail_img"></img>
+                    <form onSubmit={(e) => {
+                        e.preventDefault();
+                        handleLogin();
+                    }}>
+                        <div className="auth_input_box">
+                            <img src={mail} alt="" />
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                autoComplete="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
+
+                        <div className="auth_input_box">
+                            <img src={lock} alt="" />
+                            <input
+                                type={showpass ? "text" : "password"}
+                                placeholder="Password"
+                                autoComplete="current-password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                            <button
+                                type="button"
+                                className="auth_eye_button"
+                                onClick={() => setShowpass(!showpass)}
+                                aria-label={showpass ? "Hide password" : "Show password"}
+                            >
+                                <img src={showpass ? hide : show} alt="" />
+                            </button>
+                        </div>
+
+                        {error && (
+                            <p className="auth_error" role="alert">
+                                {error}
+                            </p>
+                        )}
+
+                        <button
+                            className="auth_submit"
+                            type="submit"
+                            disabled={loading}
+                        >
+                            {loading ? "Logging in..." : "Login"}
+                        </button>
+                    </form>
+
+                    <p className="auth_footer">
+                        Don't have an account? <Link to="/signup">Sign Up</Link>
+                    </p>
                 </div>
-
-
-                <div className = "password_box">
-                    <input value = {password} onChange = {(e) => setPassword(e.target.value)} id = "password_entry" type={showpass ? "text" : "password"} placeholder="Password" />
-                    <img src = {lock} id = "lock_img"></img>
-                    <button className = "eye_btn" onClick = {() => setShowpass(!showpass)}>
-                        <img src = {showpass ? show : hide} alt="eye" className = "eye_img"></img>
-                    </button>
-                </div>
-
-
-                <button id="login_btn" onClick={() => handleLogin()}>Login</button>
-                
-                <h1 id = "signup_link">Dont have an account? <Link to="/signup">Sign up</Link></h1>
-
-
-            </div>
-            {error ? <h1 id = "error_txt">{error}</h1>:null}
-        </>
+            </section>
+        </main>
     );
 }
+
 export default Login_card;
