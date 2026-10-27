@@ -1,4 +1,32 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+
+:root {
+    font-family: "Lato", sans-serif;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color-scheme: dark;
+    --page-bg: #1c2021;
+    --card-bg: #171b1c;
+    --text-color: #f1f5f9;
+    --muted-color: #cbd5e1;
+    --border-color: #3f484b;
+    --input-bg: #202628;
+    --accent-color: #008cff;
+}
+
+:root[data-theme="light"] {
+    color-scheme: light;
+    --page-bg: #f3f6fc;
+    --card-bg: #ffffff;
+    --text-color: #172033;
+    --muted-color: #667085;
+    --border-color: #d5dce5;
+    --input-bg: #f9fbfe;
+    --accent-color: #0077e6;
+}
 
 * {
     box-sizing: border-box;
@@ -10,7 +38,8 @@ body,
     width: 100%;
     min-height: 100%;
     margin: 0;
-    background: #f3f6fc;
+    background: var(--page-bg);
+    color: var(--text-color);
 }
 
 html {
@@ -21,6 +50,7 @@ body {
     min-width: 320px;
     min-height: 100vh;
     font-family: "Lato", sans-serif;
+    transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 #root {
@@ -50,14 +80,17 @@ button {
     width: 100%;
     min-height: 100vh;
     padding: 16px;
-    background: #f3f6fc;
+    background: var(--page-bg);
+    color: var(--text-color);
 }
 
 .brand_title,
 #smart_parking_txt {
     position: relative;
+    width: 100%;
     margin: 12px 0 18px;
     padding: 0;
+    flex-shrink: 0;
     text-align: center;
     font-family: "Lato", sans-serif;
     font-size: clamp(24px, 3vw, 32px);
@@ -84,10 +117,11 @@ button {
     width: min(400px, 100%);
     margin: 0 auto;
     padding: clamp(22px, 4vw, 34px);
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--border-color);
     border-radius: 16px;
-    background: #fff;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    background: var(--card-bg);
+    color: var(--text-color);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     font-family: "Lato", sans-serif;
 }
 
@@ -105,7 +139,7 @@ button {
 #login_txt,
 #signup_txt {
     margin: 8px 0 18px;
-    color: #000;
+    color: var(--text-color);
     text-align: center;
     font-size: clamp(24px, 4vw, 30px);
     font-weight: 700;
@@ -115,7 +149,7 @@ button {
 #wel_txt,
 #create_txt {
     margin: 0 0 20px;
-    color: #555;
+    color: var(--muted-color);
     text-align: center;
     font-size: 15px;
     font-weight: 400;
@@ -135,16 +169,16 @@ button {
     min-height: 44px;
     margin: 0 0 14px;
     padding: 0 10px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
-    background: #fff;
+    background: var(--input-bg);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .auth_input_box:focus-within,
 .signup_box:focus-within,
 .password_box:focus-within {
-    border-color: #008cff;
+    border-color: var(--accent-color);
     box-shadow: 0 0 0 3px rgba(0, 140, 255, 0.12);
 }
 
@@ -178,7 +212,7 @@ button {
     border-radius: 6px;
     outline: none;
     background: transparent;
-    color: #333;
+    color: var(--text-color);
     font-family: "Lato", sans-serif;
     font-size: 15px;
     line-height: normal;
@@ -186,11 +220,7 @@ button {
 }
 
 #email_entry,
-#email_input {
-    padding-left: 4px;
-    padding-right: 4px;
-}
-
+#email_input,
 #name_input,
 #phone_input,
 #password_entry {
@@ -206,7 +236,7 @@ button {
 #name_input::placeholder,
 #email_input::placeholder,
 #phone_input::placeholder {
-    color: #999;
+    color: var(--muted-color);
     opacity: 1;
 }
 
@@ -247,7 +277,7 @@ button {
     padding: 10px 16px;
     border: none;
     border-radius: 7px;
-    background: #008cff;
+    background: var(--accent-color);
     color: #fff;
     font-size: 15px;
     font-weight: 700;
@@ -283,7 +313,7 @@ button {
     padding: 8px;
     border: none;
     background: transparent;
-    color: #007bdc;
+    color: var(--accent-color);
     font-size: 14px;
 }
 
@@ -294,7 +324,7 @@ button {
 .auth_footer,
 #signup_link {
     margin: 20px 0 0;
-    color: #777;
+    color: var(--muted-color);
     text-align: center;
     font-size: 14px;
     line-height: 1.6;
@@ -303,7 +333,7 @@ button {
 
 .auth_footer a,
 #signup_link a {
-    color: #008cff;
+    color: var(--accent-color);
     font-weight: 700;
     text-decoration: none;
 }
@@ -345,7 +375,7 @@ button {
 
 .auth_hint {
     margin: 0 0 14px;
-    color: #555;
+    color: var(--muted-color);
     font-size: 13px;
     text-align: center;
     overflow-wrap: anywhere;
@@ -358,9 +388,10 @@ button {
     min-height: 0;
     margin: 20px auto 32px;
     padding: clamp(22px, 4vw, 32px);
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 16px;
-    background: #fff;
+    background: var(--card-bg);
+    color: var(--text-color);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
 }
 
@@ -402,33 +433,286 @@ button {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 14px;
+    gap: 20px;
+    width: min(460px, calc(100% - 24px));
+    margin: 30px auto;
+    padding: 34px;
+    border-radius: 20px;
+    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.12);
 }
 
 .otp_card p {
     margin: 0;
-    color: #666;
+    color: var(--muted-color);
     font-size: 14px;
     text-align: center;
     overflow-wrap: anywhere;
 }
 
+#otp_txt {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 30px;
+    font-weight: 700;
+    text-align: left;
+}
+
+.otp_description {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px 8px;
+}
+
+.otp_description p {
+    margin: 0;
+    color: var(--muted-color);
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.otp_description strong {
+    color: var(--text-color);
+    font-weight: 700;
+}
+
+.resend_text_btn,
+.change_email_text_btn {
+    width: auto;
+    padding: 3px 0;
+    border: none;
+    background: transparent;
+    color: var(--accent-color);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.resend_text_btn:hover:not(:disabled),
+.change_email_text_btn:hover:not(:disabled) {
+    text-decoration: underline;
+}
+
+.resend_text_btn:disabled,
+.change_email_text_btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.otp_card .change_email_text_btn {
+    align-self: center;
+    margin-top: -8px;
+    color: var(--muted-color);
+    font-weight: 400;
+}
+
 #otp_input {
     flex: initial;
     width: 100%;
-    min-width: 0;
-    height: 48px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 20px;
-    letter-spacing: clamp(3px, 2vw, 8px);
+    height: 56px;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 11px;
+    outline: none;
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-size: 22px;
+    letter-spacing: 8px;
     text-align: center;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 #otp_input:focus {
-    border-color: #008cff;
-    box-shadow: 0 0 0 3px rgba(0, 140, 255, 0.12);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 4px rgba(8, 120, 223, 0.12);
+}
+
+#otp_input::placeholder {
+    color: var(--muted-color);
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+#verify_btn {
+    min-height: 52px;
+    margin: 0;
+    border-radius: 11px;
+    font-size: 16px;
+}
+
+.password_box {
+    position: relative;
+}
+
+.password_box .lock_img {
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    transform: translateY(-50%);
+}
+
+.password_box #password_entry,
+.password_box #confirm_password_entry {
+    box-sizing: border-box;
+    width: 100%;
+    padding-left: 42px;
+    padding-right: 45px;
+}
+
+.password_box .eye_btn {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transform: translateY(-50%);
+}
+
+.password_box .eye_img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.signup_error,
+.signup_success {
+    width: min(460px, calc(100% - 32px));
+    margin: 14px auto;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.signup_error {
+    color: #d92d20;
+}
+
+.signup_success {
+    color: #16803c;
+}
+
+.signup_progress {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0 0 30px;
+}
+
+.progress_step {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 25%;
+    color: var(--muted-color);
+    font-size: 12px;
+}
+
+.progress_circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    background: var(--card-bg);
+    color: var(--muted-color);
+    font-size: 13px;
+    font-weight: 700;
+    transition: all 0.25s ease;
+}
+
+.progress_circle.active {
+    border-color: var(--accent-color);
+    background: var(--accent-color);
+    color: #fff;
+    box-shadow: 0 0 0 4px rgba(0, 140, 255, 0.15);
+}
+
+.progress_step .active_label {
+    color: var(--accent-color);
+    font-weight: 700;
+}
+
+.progress_track {
+    position: absolute;
+    z-index: 1;
+    top: 15px;
+    left: 12.5%;
+    width: 75%;
+    height: 3px;
+    overflow: hidden;
+    border-radius: 5px;
+    background: var(--border-color);
+}
+
+.progress_fill {
+    height: 100%;
+    border-radius: inherit;
+    background: var(--accent-color);
+    transition: width 0.3s ease;
+}
+
+.theme_toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    background: var(--card-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.theme_switch {
+    display: flex;
+    align-items: center;
+    width: 36px;
+    height: 20px;
+    padding: 2px;
+    border-radius: 20px;
+    background: var(--border-color);
+}
+
+.theme_switch_knob {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 0.25s ease;
+}
+
+:root[data-theme="light"] .theme_switch {
+    background: var(--accent-color);
+}
+
+:root[data-theme="light"] .theme_switch_knob {
+    transform: translateX(16px);
+}
+
+a {
+    color: var(--accent-color);
 }
 
 @keyframes toast-in {
@@ -485,6 +769,35 @@ button {
     }
 }
 
+@media (max-width: 520px) {
+    .otp_card {
+        width: calc(100% - 24px);
+        padding: 26px 20px;
+        gap: 18px;
+    }
+
+    .progress_step {
+        font-size: 11px;
+    }
+
+    .progress_circle {
+        width: 29px;
+        height: 29px;
+    }
+
+    .progress_track {
+        top: 13px;
+    }
+
+    #otp_txt {
+        font-size: 26px;
+    }
+
+    #otp_input {
+        letter-spacing: 5px;
+    }
+}
+
 @media (max-width: 480px) {
     .signup_card,
     .otp_card {
@@ -504,6 +817,12 @@ button {
     #login_btn,
     #verify_btn {
         margin-top: 12px;
+    }
+
+    .theme_toggle {
+        top: 12px;
+        right: 12px;
+        padding: 7px 10px;
     }
 }
 
@@ -532,48 +851,4 @@ button {
         animation-duration: 0.01ms !important;
         transition-duration: 0.01ms !important;
     }
-}
-html,
-body,
-#root {
-    background-color: #f3f6fc !important;
-}
-
-body {
-    min-height: 100vh;
-}
-
-#root {
-    min-height: 100vh;
-    overflow-x: hidden;
-}
-
-#root > * {
-    background-color: transparent;
-}
-
-.signup_card,
-.otp_card {
-    background-color: #fff !important;
-}
-#root:has(.signup_card),
-#root:has(.otp_card) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
-    padding: 12px;
-}
-
-#smart_parking_txt {
-    width: 100%;
-    margin: 12px 0 0;
-    flex-shrink: 0;
-}
-
-.signup_card,
-.otp_card {
-    margin: auto;
-    flex-shrink: 0;
 }

@@ -3,13 +3,17 @@ import{BrowserRouter, Route, Routes} from "react-router-dom";
 import Signup_card from './sign_up.jsx';
 import Dashboard from './dashboard.jsx';
 import mail from "./assets/mail.png";
-
+import ThemeToggle from "./ThemeToggle";
 function App() {
   return (
     <>
     
       <title>Park Nest</title>
       <link rel = "icon" type = "image/svg+xml" href={mail}/>
+      <nav className="navbar">
+        <div className="navbar_logo"></div>
+        <ThemeToggle />
+      </nav>
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login_card />} />

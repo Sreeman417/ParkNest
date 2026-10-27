@@ -1,12 +1,29 @@
+
 :root {
     font-family: "Lato", sans-serif;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: #333;
-    background: #f3f6fc;
+    color-scheme: dark;
+    --page-bg: #1c2021;
+    --card-bg: #171b1c;
+    --text-color: #f1f5f9;
+    --muted-color: #cbd5e1;
+    --border-color: #3f484b;
+    --input-bg: #202628;
+    --accent-color: #008cff;
+}
+
+:root[data-theme="light"] {
     color-scheme: light;
+    --page-bg: #f3f6fc;
+    --card-bg: #ffffff;
+    --text-color: #172033;
+    --muted-color: #526174;
+    --border-color: #d5dce5;
+    --input-bg: #ffffff;
+    --accent-color: #0077e6;
 }
 
 * {
@@ -17,6 +34,7 @@ html {
     width: 100%;
     min-height: 100%;
     margin: 0;
+    background: var(--page-bg);
 }
 
 body {
@@ -24,7 +42,9 @@ body {
     min-width: 320px;
     min-height: 100vh;
     margin: 0;
-    background: #f3f6fc;
+    background: var(--page-bg);
+    color: var(--text-color);
+    transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 #root {
@@ -32,7 +52,8 @@ body {
     max-width: 100%;
     min-height: 100vh;
     margin: 0;
-    background: #f3f6fc;
+    background: var(--page-bg);
+    color: var(--text-color);
 }
 
 h1,

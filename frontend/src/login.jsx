@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./App.css";
@@ -14,6 +13,7 @@ function Login_card() {
     const [showpass, setShowpass] = useState(false);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [name,setname] = useState("");
     const navigate = useNavigate();
 
     const handleLogin = async () => {
@@ -32,7 +32,7 @@ function Login_card() {
             const data = await response.json();
             if (data.token) {
                 localStorage.setItem("token", data.token);
-                navigate("/dashboard");
+                navigate("/dashboard",{state:{name:data.name}});
             }
             else {
                 setError(data.detail || "Login failed");
