@@ -7,6 +7,7 @@ import signup from "./assets/user.png";
 import lock from "./assets/padlock.png";
 import show from "./assets/show.png";
 import hide from "./assets/hide.png";
+import parknestlogo from "./assets/parknest.png";
 import { useNavigate } from "react-router-dom";
 
 function Signup_card() {
@@ -248,7 +249,9 @@ function Signup_card() {
 
     return (
         <>
-            <h1 id="smart_parking_txt">Park Nest</h1>
+            <h1 className="brand_title">
+                <img src={parknestlogo} alt="ParkNest" />
+            </h1>
 
             {step === 1 && (
                 <div className="signup_card">

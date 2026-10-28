@@ -103,6 +103,23 @@ button {
     color: transparent;
     -webkit-text-fill-color: transparent;
 }
+.brand_title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 12px 0 18px;
+    padding: 0;
+    background: none;
+    color: var(--text-color);
+    -webkit-text-fill-color: initial;
+}
+
+.brand_title img {
+    display: block;
+    width: 300px;
+    height: 100px;
+    object-fit: contain;
+}
 
 .auth_content {
     display: flex;
@@ -851,4 +868,25 @@ a {
         animation-duration: 0.01ms !important;
         transition-duration: 0.01ms !important;
     }
+}
+.dark-mode {
+    background-color: #1b1f20;
+    color: #f5f5f5;
+}
+
+.dark-mode .card,
+.dark-mode .form_card,
+.dark-mode .dashboard_card,
+.dark-mode .stat_card {
+    background-color: #252a2b;
+    color: #f5f5f5;
+    border-color: #3a4143;
+}
+
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode p,
+.dark-mode label {
+    color: #f5f5f5;
 }

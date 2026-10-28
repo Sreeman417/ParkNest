@@ -1,3 +1,4 @@
+
 @import "leaflet/dist/leaflet.css";
 
 * {
@@ -15,12 +16,15 @@ body,
 
 body {
     font-family: "Lato", sans-serif;
-    background-color: #f3f6fc;
+    background-color: var(--page-bg, #f3f6fc);
+    color: var(--text-color, #172033);
 }
 
 #root {
     max-width: 100%;
 }
+
+
 .menu_btn {
     position: fixed !important;
     top: 25px !important;
@@ -37,12 +41,7 @@ body {
     display: flex !important;
     align-items: center;
     justify-content: center;
-    transition: left 0.4s ease, transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.menu_btn:hover {
-    transform: scale(1.08);
-    box-shadow: 0 6px 18px rgba(0, 140, 255, 0.35);
+    transition: left 0.4s ease !important;
 }
 
 .menu_btn.active {
@@ -50,12 +49,18 @@ body {
 }
 
 .menu_btn:hover {
-    transform: scale(1.08);
     box-shadow: 0 6px 18px rgba(0, 140, 255, 0.35);
 }
-.menu_btn.active {
-    left: 320px !important;
+
+.menu_btn img {
+    transition: transform 0.25s ease;
 }
+
+.menu_btn:hover img {
+    transform: scale(1.08);
+}
+
+
 .parknest_logo {
     width: 190px;
     height: auto;
@@ -78,16 +83,18 @@ body {
     width: 300px;
     height: 100vh;
     padding: 25px 18px 20px;
-    box-sizing: border-box;
-    background-color: white;
+    background-color: var(--card-bg, #ffffff);
+    color: var(--text-color, #172033);
     box-shadow: 5px 0 25px rgba(0, 0, 0, 0.12);
-    transform: translateX(-100%);
-    transition: transform 0.4s ease;
+    transform: translateX(-100%) !important;
+    transition: transform 0.4s ease !important;
+    will-change: transform;
     z-index: 100;
+    overflow-y: auto;
 }
 
 .sidebar.active {
-    transform: translateX(0);
+    transform: translateX(0) !important;
 }
 
 .sidebar_btn {
@@ -107,7 +114,7 @@ body {
 }
 
 .sidebar_btn:hover {
-    background-color: #f0f7ff;
+    background-color: var(--input-bg, #f0f7ff);
     transform: translateX(4px);
 }
 
@@ -127,18 +134,19 @@ body {
     font-family: "Lato", sans-serif;
     font-size: 16px;
     font-weight: 700;
-    color: #333;
+    color: var(--text-color, #333);
     white-space: nowrap;
 }
 
 .sidebar_btn:hover span {
-    color: #008cff;
+    color: var(--accent-color, #008cff);
 }
 
 .logout_btn {
     margin-top: 25px;
     border-bottom: none;
 }
+
 .page_transition {
     animation: pageEnter 0.35s ease;
 }
@@ -152,5 +160,16 @@ body {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebar,
+    .menu_btn,
+    .sidebar_btn,
+    .sidebar_btn img,
+    .page_transition {
+        transition: none;
+        animation: none;
     }
 }

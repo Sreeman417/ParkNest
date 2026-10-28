@@ -41,12 +41,38 @@
     letter-spacing: 1.5px;
 }
 
-#dashboard_txt {
-    margin: 28px 0 4px;
-    text-align: center;
-    font-size: 38px;
-    font-weight: 700;
-    color: #087fe7;
+.dashboard_page .page_intro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.dashboard_page .eyebrow {
+    text-align: left;
+}
+
+.dashboard_page #dashboard_txt {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+.dashboard_page #dashboard_txt img {
+    display: block;
+    width: 240px;
+    height: 90px;
+    object-fit: contain;
+}
+
+.dashboard_page #welcomde_txt {
+    margin: 0 0 8px;
+    text-align: left;
+}
+
+.dashboard_page .page_intro > p:last-child {
+    text-align: left;
 }
 
 #welcomde_txt {
@@ -890,4 +916,155 @@
         animation-duration: 0.01ms !important;
         transition-duration: 0.01ms !important;
     }
+}
+.dark-mode .page_shell,
+.dark-mode .page_intro h1,
+.dark-mode .page_intro h2,
+.dark-mode .section_heading h2,
+.dark-mode .section_heading p,
+.dark-mode .map_legend {
+    color: #f5f5f5;
+}
+
+.dark-mode .availablespace,
+.dark-mode .mybookings,
+.dark-mode .mylands,
+.dark-mode .find_parking_card,
+.dark-mode .form_card,
+.dark-mode .calendar_card,
+.dark-mode .parking_card,
+.dark-mode .property_card,
+.dark-mode .booking_item,
+.dark-mode .utility_chip,
+.dark-mode .empty_results {
+    background: #252a2b;
+    color: #f5f5f5;
+    border-color: #3a4143;
+}
+
+.dark-mode .availablespace h1,
+.dark-mode .mybookings h1,
+.dark-mode .mylands h1,
+.dark-mode .availablespace h2,
+.dark-mode .mybookings h2,
+.dark-mode .mylands h2,
+.dark-mode .parking_card h2,
+.dark-mode .property_card h2,
+.dark-mode .form_card h2,
+.dark-mode .form_card h3,
+.dark-mode .calendar_card h2,
+.dark-mode .booking_details h3,
+.dark-mode .utility_chip strong {
+    color: #f5f5f5;
+}
+
+.dark-mode .availablespace p,
+.dark-mode .mybookings p,
+.dark-mode .mylands p,
+.dark-mode .parking_card p,
+.dark-mode .property_card p,
+.dark-mode .booking_details p,
+.dark-mode .utility_chip span,
+.dark-mode .muted_text,
+.dark-mode .demo_note {
+    color: #b0bacb;
+}
+
+.dark-mode .parking_search input,
+.dark-mode .parking_search select,
+.dark-mode .form_card input,
+.dark-mode .form_card select,
+.dark-mode .form_card textarea,
+.dark-mode .calendar_card input {
+    background: #1b1f20;
+    color: #f5f5f5;
+    border-color: #41494c;
+}
+
+.dark-mode .form_card label,
+.dark-mode .calendar_card label {
+    color: #d5dbea;
+}
+
+.dark-mode .booking_estimate,
+.dark-mode .calendar_summary {
+    background: #30383b;
+    color: #d5dbea;
+}
+
+.dark-mode .profile_banner {
+    border-color: #3a4143;
+}
+[data-theme="dark"] .availablespace,
+[data-theme="dark"] .mybookings,
+[data-theme="dark"] .mylands,
+[data-theme="dark"] .find_parking_card,
+[data-theme="dark"] .form_card,
+[data-theme="dark"] .calendar_card,
+[data-theme="dark"] .parking_card,
+[data-theme="dark"] .property_card,
+[data-theme="dark"] .booking_item,
+[data-theme="dark"] .utility_chip,
+[data-theme="dark"] .empty_results {
+    background: #252a2b;
+    color: #f5f5f5;
+    border-color: #3a4143;
+}
+
+[data-theme="dark"] .availablespace h1,
+[data-theme="dark"] .mybookings h1,
+[data-theme="dark"] .mylands h1,
+[data-theme="dark"] .availablespace h2,
+[data-theme="dark"] .mybookings h2,
+[data-theme="dark"] .mylands h2,
+[data-theme="dark"] .parking_card h2,
+[data-theme="dark"] .property_card h2,
+[data-theme="dark"] .form_card h2,
+[data-theme="dark"] .form_card h3,
+[data-theme="dark"] .calendar_card h2,
+[data-theme="dark"] .booking_details h3,
+[data-theme="dark"] .utility_chip strong {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .page_intro h1,
+[data-theme="dark"] .section_heading h2 {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .page_intro p,
+[data-theme="dark"] .section_heading p,
+[data-theme="dark"] .parking_card p,
+[data-theme="dark"] .property_card p,
+[data-theme="dark"] .booking_details p,
+[data-theme="dark"] .utility_chip span,
+[data-theme="dark"] .muted_text,
+[data-theme="dark"] .demo_note {
+    color: #b0bacb;
+}
+
+[data-theme="dark"] .parking_search input,
+[data-theme="dark"] .parking_search select,
+[data-theme="dark"] .form_card input,
+[data-theme="dark"] .form_card select,
+[data-theme="dark"] .form_card textarea,
+[data-theme="dark"] .calendar_card input {
+    background: #1b1f20;
+    color: #f5f5f5;
+    border-color: #41494c;
+}
+
+[data-theme="dark"] .form_card label,
+[data-theme="dark"] .calendar_card label {
+    color: #d5dbea;
+}
+
+[data-theme="dark"] .booking_estimate,
+[data-theme="dark"] .calendar_summary {
+    background: #30383b;
+    color: #d5dbea;
+}
+
+[data-theme="dark"] .profile_banner {
+    border-color: #3a4143;
 }

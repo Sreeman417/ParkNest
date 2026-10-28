@@ -2,12 +2,14 @@
 from email.message import EmailMessage
 import os
 from datetime import datetime, timedelta, timezone
-
+from pymongo import MongoClient
 import aiosmtplib
 from dotenv import load_dotenv
 from jose import jwt, JWTError
 from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
+from bson import ObjectId
+
 
 load_dotenv()
 
@@ -15,6 +17,11 @@ email = os.getenv("gmail_user")
 password = os.getenv("gmail_pass")
 jwt_secret = os.getenv("JWT_SECRET")
 
+
+m_url = os.getenv("m_url")
+client = MongoClient(m_url)
+db = client["parknest"]
+users = db["users"]
 if not jwt_secret:
     raise RuntimeError("JWT_SECRET is missing from .env")
 
@@ -81,3 +88,25 @@ def token_verifier(token: str = Depends(oauth2_scheme)):
 
     except JWTError:
         raise credentials_error
+
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    try:
+        payload = jwt.decode(
+            token,
+            jwt_secret,
+            algorithms=["HS256"]
+        )
+        user_id = payload.get("sub")
+
+        if not user_id or not ObjectId.is_valid(user_id):
+            raise HTTPException(status_code=401, detail="Invalid token")
+
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+
+    current_user = users.find_one({"_id": ObjectId(user_id)})
+
+    if not current_user:
+        raise HTTPException(status_code=401, detail="User not found")
+
+    return current_user

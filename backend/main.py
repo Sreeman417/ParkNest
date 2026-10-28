@@ -275,6 +275,68 @@ def handle_signup(data: signup_data):
 
     return {"detail": "ok"}
 
+
+class user_data(BaseModel):
+    name: str
+    address: str = ""
+    vehicle: str = "Car"
+    vehicel_no: str = ""
+    emergency_con: str = ""
+    about_u: str = ""
+
+
+@app.get("/main_profile")
+def get_profile(current_user: dict = Depends(get_current_user)):
+    email = current_user.get("email", "")
+    saved = profile.find_one({"email": email}) or {}
+
+    return {
+        "name": saved.get("name", current_user.get("name", "")),
+        "email": email,
+        "phone": current_user.get("phone", saved.get("phone", "")),
+        "address": saved.get("address", ""),
+        "vehicle": saved.get("vehicle", "Car"),
+        "vehicel_no": saved.get("vehicel_no", ""),
+        "emergency_con": saved.get("emergency_con", ""),
+        "about_u": saved.get("about_u", "")
+    }
+
+
+@app.post("/main_profile")
+def save_profile(
+    data: user_data,
+    current_user: dict = Depends(get_current_user)
+):
+    email = current_user["email"]
+    phone = current_user.get("phone", "")
+
+    profile.update_one(
+        {"email": email},
+        {
+            "$set": {
+                "name": data.name,
+                "email": email,
+                "phone": phone,
+                "address": data.address,
+                "vehicle": data.vehicle,
+                "vehicel_no": data.vehicel_no,
+                "emergency_con": data.emergency_con,
+                "about_u": data.about_u
+            }
+        },
+        upsert=True
+    )
+
+    users.update_one(
+        {"_id": current_user["_id"]},
+        {"$set": {"name": data.name}}
+    )
+
+    return {
+        "detail": "ok",
+        "message": "Profile saved successfully"
+    }
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",

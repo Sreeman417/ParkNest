@@ -6,7 +6,7 @@ import mail from "./assets/mail.png";
 import lock from "./assets/padlock.png";
 import show from "./assets/show.png";
 import hide from "./assets/hide.png";
-
+import parknestlogo from "./assets/parknest.png"
 function Login_card() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -48,7 +48,9 @@ function Login_card() {
 
     return (
         <main className="auth_page">
-            <h1 className="brand_title">Park Nest</h1>
+            <h1 className="brand_title">
+                <img src={parknestlogo} alt="ParkNest" />
+            </h1>
 
             <section className="auth_content">
                 <div className="auth_card">

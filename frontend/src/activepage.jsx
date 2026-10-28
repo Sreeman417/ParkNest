@@ -8,7 +8,7 @@ import mylands from "./assets/mylands.png";
 import "./activepage.css";
 import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
 import { useEffect, useRef, useState } from "react";
-
+import parknestLogo from "./assets/parknest.png";
 const defaultParkingSpaces = [
     { id: 1, name: "City Centre Parking", address: "Gandhipuram, Coimbatore", price: 40, distance: "0.8 km", available: 8, lat: 11.0183, lng: 76.9674 },
     { id: 2, name: "Mall Road Parking", address: "RS Puram, Coimbatore", price: 60, distance: "1.5 km", available: 5, lat: 11.0068, lng: 76.9558 },
@@ -308,7 +308,9 @@ function Dashboard_main({ setactivepage, name }) {
         <div className="page_shell dashboard_page">
             <div className="page_intro">
                 <span className="eyebrow">YOUR PARKING SPACE</span>
-                <h1 id="dashboard_txt">ParkNest</h1>
+                <h1 id="dashboard_txt">
+                    <img src={parknestLogo} alt="ParkNest" />
+                </h1>
                 <h2 id="welcomde_txt">Welcome back! {name || "Driver"}</h2>
                 <p>Manage your parking, bookings and properties in one place.</p>
             </div>
@@ -829,10 +831,10 @@ function MyLands() {
     );
 }
 
-function Profile({ name = "" }) {
 
-    const [profile, setProfile] = useState(() => readSaved("parknest_profile", {
-        name,
+function Profile({ name = "" }) {
+    const [profile, setProfile] = useState({
+        name: name || "",
         email: "",
         phone: "",
         address: "",
@@ -840,21 +842,110 @@ function Profile({ name = "" }) {
         vehicleNumber: "",
         emergencyContact: "",
         bio: ""
-    }));
+    });
 
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const loadProfile = async () => {
+            try {
+                const token = localStorage.getItem("token");
+
+                if (!token) {
+                    throw new Error("Please log in again.");
+                }
+
+                const response = await fetch(
+                    "http://127.0.0.1:8000/main_profile",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || "Could not load profile.");
+                }
+
+                setProfile({
+                    name: data.name || name || "",
+                    email: data.email || "",
+                    phone: data.phone || "",
+                    address: data.address || "",
+                    vehicleType: data.vehicle || "Car",
+                    vehicleNumber: data.vehicel_no || "",
+                    emergencyContact: data.emergency_con || "",
+                    bio: data.about_u || ""
+                });
+            } catch (error) {
+                setMessage(error.message || "Could not load profile.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadProfile();
+    }, [name]);
 
     const update = event => {
-        setProfile({ ...profile, [event.target.name]: event.target.value });
+        const { name, value } = event.target;
+
+        setProfile(current => ({
+            ...current,
+            [name]: value
+        }));
     };
 
-    const submit = event => {
+    const submit = async event => {
         event.preventDefault();
-        saveData("parknest_profile", profile);
-        setMessage("Profile saved on this device.");
+        setMessage("");
+
+        try {
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                throw new Error("Please log in again.");
+            }
+
+            const response = await fetch(
+                "http://127.0.0.1:8000/main_profile",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        name: profile.name,
+                        address: profile.address,
+                        vehicle: profile.vehicleType,
+                        vehicel_no: profile.vehicleNumber,
+                        emergency_con: profile.emergencyContact,
+                        about_u: profile.bio
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.detail || "Failed to save profile.");
+            }
+
+            setMessage("Profile saved successfully.");
+        } catch (error) {
+            setMessage(error.message || "Could not connect to the server.");
+        }
     };
 
-    
+    if (loading) {
+        return <div className="page_shell">Loading profile...</div>;
+    }
+
     return (
         <div className="page_shell">
             <div className="page_intro">
@@ -879,22 +970,43 @@ function Profile({ name = "" }) {
                 <div className="form_grid">
                     <label>
                         Full name
-                        <input name="name" value={profile.name} onChange={update} required placeholder="Your full name" />
+                        <input
+                            name="name"
+                            value={profile.name}
+                            onChange={update}
+                            required
+                            placeholder="Your full name"
+                        />
                     </label>
 
                     <label>
-                        Email address
-                        <input name="email" type="email" value={profile.email} onChange={update} required placeholder="you@example.com" />
+                        Verified email address
+                        <input
+                            name="email"
+                            type="email"
+                            value={profile.email}
+                            readOnly
+                        />
                     </label>
 
                     <label>
                         Phone number
-                        <input name="phone" type="tel" value={profile.phone} onChange={update} required placeholder="Your contact number" />
+                        <input
+                            name="phone"
+                            type="tel"
+                            value={profile.phone}
+                            readOnly
+                        />
                     </label>
 
                     <label>
                         Home address
-                        <input name="address" value={profile.address} onChange={update} placeholder="Street, area, city" />
+                        <input
+                            name="address"
+                            value={profile.address}
+                            onChange={update}
+                            placeholder="Street, area, city"
+                        />
                     </label>
                 </div>
 
@@ -903,7 +1015,11 @@ function Profile({ name = "" }) {
                 <div className="form_grid">
                     <label>
                         Vehicle type
-                        <select name="vehicleType" value={profile.vehicleType} onChange={update}>
+                        <select
+                            name="vehicleType"
+                            value={profile.vehicleType}
+                            onChange={update}
+                        >
                             <option>Car</option>
                             <option>Motorcycle</option>
                             <option>Scooter</option>
@@ -914,28 +1030,51 @@ function Profile({ name = "" }) {
 
                     <label>
                         Vehicle registration
-                        <input name="vehicleNumber" value={profile.vehicleNumber} onChange={update} placeholder="e.g. TN 00 AB 1234" />
+                        <input
+                            name="vehicleNumber"
+                            value={profile.vehicleNumber}
+                            onChange={update}
+                            placeholder="e.g. TN 00 AB 1234"
+                        />
                     </label>
 
                     <label>
                         Emergency contact
-                        <input name="emergencyContact" type="tel" value={profile.emergencyContact} onChange={update} placeholder="Optional contact number" />
+                        <input
+                            name="emergencyContact"
+                            type="tel"
+                            value={profile.emergencyContact}
+                            onChange={update}
+                            placeholder="Optional contact number"
+                        />
                     </label>
 
                     <label className="full_field">
                         About you
-                        <textarea name="bio" rows="3" value={profile.bio} onChange={update} placeholder="Any preferences or notes" />
+                        <textarea
+                            name="bio"
+                            rows="3"
+                            value={profile.bio}
+                            onChange={update}
+                            placeholder="Any preferences or notes"
+                        />
                     </label>
                 </div>
 
                 <div className="profile_form_footer">
-                    <button className="primary_btn" type="submit">Save profile</button>
-                    {message && <span className="success_message">{message}</span>}
+                    <button className="primary_btn" type="submit">
+                        Save profile
+                    </button>
+
+                    {message && (
+                        <span className="success_message">{message}</span>
+                    )}
                 </div>
             </form>
         </div>
     );
 }
+
 
 function Logout() {
     return (
