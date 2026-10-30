@@ -416,7 +416,7 @@ async def add_land(data: land, current_user: dict = Depends(get_current_user)):
         latitude, longitude = await get_coordinates(address)
 
     new_land = {
-        "user_email": email,
+        "email": email,
         "title": title,
         "address": address,
         "area": area,
@@ -435,6 +435,14 @@ async def add_land(data: land, current_user: dict = Depends(get_current_user)):
         "land_id": str(result.inserted_id)
     }
 
+
+@app.get("/my_lands")
+def my_lands(curr_user : dict = Depends(get_current_user)):
+    email = curr_user["email"]
+    my_lands = list(lands_db.find({"email":email}))
+    for i in my_lands:
+        i["_id"] = str(i["_id"])
+    return {"lands" : my_lands}
 
 if __name__ == "__main__":
     uvicorn.run(

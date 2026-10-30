@@ -1,21 +1,43 @@
 
 import land from "../assets/land-plot.png";
 import "../activepage.css";
-import { useState } from "react";
-import { readSaved, saveData } from "./storage.js";
+import { useEffect, useState } from "react";
 import Map from "./map.jsx";
 
 function MyLands() {
-    const [lands, setLands] = useState(() =>
-        readSaved("parknest_lands", [])
-    );
+    const [lands, setLands] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [message, setMessage] = useState("");
 
-    const removeLand = id => {
-        const updated = lands.filter(item => item.id !== id);
+    useEffect(() => {
+        const fetchMyLands = async () => {
+            try {
+                const response = await fetch("http://127.0.0.1:8000/my_lands", {
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    }
+                });
 
-        saveData("parknest_lands", updated);
-        setLands(updated);
-    };
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        typeof data.detail === "string"
+                            ? data.detail
+                            : "Could not fetch your properties"
+                    );
+                }
+
+                setLands(data.lands || []);
+            } catch (error) {
+                setMessage(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchMyLands();
+    }, []);
 
     return (
         <div className="page_shell">
@@ -25,14 +47,18 @@ function MyLands() {
                 <p>Review your listed parking lands, rates and basic utilities.</p>
             </div>
 
-            {lands.length ? (
+            {loading ? (
+                <div className="empty_results">Loading properties...</div>
+            ) : message ? (
+                <div className="empty_results">{message}</div>
+            ) : lands.length ? (
                 <div className="property_grid">
                     {lands.map(item => (
-                        <article className="property_card" key={item.id}>
+                        <article className="property_card" key={item._id}>
                             <div className="property_card_top">
                                 <img src={land} alt="" />
                                 <span className="parking_badge">
-                                    {item.slots || 0} spaces
+                                    {item.slots} spaces
                                 </span>
                             </div>
 
@@ -57,18 +83,15 @@ function MyLands() {
                                 className="secondary_btn"
                                 onClick={() => window.dispatchEvent(
                                     new CustomEvent("showPlaceOnMap", {
-                                        detail: item
+                                        detail: {
+                                            lat: Number(item.latitude),
+                                            lng: Number(item.longitude),
+                                            name: item.title
+                                        }
                                     })
                                 )}
                             >
                                 Show on map
-                            </button>
-
-                            <button
-                                className="text_btn danger_text"
-                                onClick={() => removeLand(item.id)}
-                            >
-                                Remove listing
                             </button>
                         </article>
                     ))}
