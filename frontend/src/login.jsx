@@ -13,11 +13,12 @@ function Login_card() {
     const [showpass, setShowpass] = useState(false);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const [name,setname] = useState("");
     const navigate = useNavigate();
 
     const handleLogin = async () => {
+        setError("");
         setLoading(true);
+
         try {
             const response = await fetch("http://127.0.0.1:8000/login", {
                 method: "POST",
@@ -26,22 +27,26 @@ function Login_card() {
                 },
                 body: JSON.stringify({
                     email: email.trim(),
-                    password:password
+                    password: password
                 })
             });
+
             const data = await response.json();
+
+            if (!response.ok) {
+                setError(data.detail || "Login failed");
+                return;
+            }
+
             if (data.token) {
                 localStorage.setItem("token", data.token);
-                navigate("/dashboard",{state:{name:data.name}});
+                navigate("/dashboard", { state: { name: data.name } });
+            } else {
+                setError("Login failed. Please try again.");
             }
-            else {
-                setError(data.detail || "Login failed");
-            }
-        }
-        catch (err) {
-            console.error("Error during login:", err);
-        }
-        finally {
+        } catch (err) {
+            setError("Unable to connect to the server. Please try again.");
+        } finally {
             setLoading(false);
         }
     };

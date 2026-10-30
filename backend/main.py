@@ -1,5 +1,5 @@
 import uvicorn
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException,Depends
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
@@ -9,7 +9,6 @@ from pwdlib import PasswordHash
 from datetime import datetime, timedelta, timezone
 import re
 import secrets
-
 from modules import *
 
 
@@ -63,6 +62,7 @@ db = client["parknest"]
 users = db["users"]
 profile = db["profile"]
 otp_db = db["otp"]
+lands_db = db["lands"]
 passwordhash = PasswordHash.recommended()
 
 
@@ -336,6 +336,105 @@ def save_profile(
         "detail": "ok",
         "message": "Profile saved successfully"
     }
+
+class land(BaseModel):
+    title: str
+    address: str
+    area: str
+    price: str
+    slots: str
+    description: str
+    utilities: list[str]
+    latitude: str = ""
+    longitude: str = ""
+
+@app.post("/add_land")
+async def add_land(data: land, current_user: dict = Depends(get_current_user)):
+    email = current_user["email"]
+
+    if not data.title.strip() or len(data.title.strip()) < 3:
+        raise HTTPException(status_code=400, detail="Title must contain at least 3 characters")
+    else:
+        title = data.title.strip()
+
+    if not data.address.strip() or len(data.address.strip()) < 5:
+        raise HTTPException(status_code=400, detail="Enter a valid address")
+    else:
+        address = data.address.strip()
+
+    if not data.area.strip():
+        raise HTTPException(status_code=400, detail="Land area is required")
+    else:
+        try:
+            area_value = float(data.area)
+            if area_value <= 0:
+                raise ValueError
+            area = data.area.strip()
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Land area must be a positive number")
+
+    if not data.price.strip():
+        raise HTTPException(status_code=400, detail="Price is required")
+    else:
+        try:
+            price_value = float(data.price)
+            if price_value <= 0:
+                raise ValueError
+            price = data.price.strip()
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Price must be a positive number")
+
+    if not data.slots.strip() or not data.slots.isdigit() or int(data.slots) <= 0:
+        raise HTTPException(status_code=400, detail="Enter a valid number of parking spaces")
+    else:
+        slots = data.slots.strip()
+
+    if not data.description.strip() or len(data.description.strip()) < 10:
+        raise HTTPException(status_code=400, detail="Description must contain at least 10 characters")
+    else:
+        description = data.description.strip()
+
+    if not data.utilities or not all(item.strip() for item in data.utilities):
+        raise HTTPException(status_code=400, detail="Select valid utilities")
+    else:
+        utilities = data.utilities
+
+    if data.latitude.strip() and data.longitude.strip():
+        try:
+            latitude_value = float(data.latitude)
+            longitude_value = float(data.longitude)
+
+            if not (-90 <= latitude_value <= 90 and -180 <= longitude_value <= 180):
+                raise ValueError
+
+            latitude = data.latitude
+            longitude = data.longitude
+
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Invalid location coordinates")
+    else:
+        latitude, longitude = await get_coordinates(address)
+
+    new_land = {
+        "user_email": email,
+        "title": title,
+        "address": address,
+        "area": area,
+        "price": price,
+        "slots": slots,
+        "description": description,
+        "utilities": utilities,
+        "latitude": latitude,
+        "longitude": longitude
+    }
+
+    result = lands_db.insert_one(new_land)
+
+    return {
+        "detail": "Property added successfully",
+        "land_id": str(result.inserted_id)
+    }
+
 
 if __name__ == "__main__":
     uvicorn.run(

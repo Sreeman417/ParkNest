@@ -1,4 +1,4 @@
-
+import httpx
 from email.message import EmailMessage
 import os
 from datetime import datetime, timedelta, timezone
@@ -59,10 +59,43 @@ def token_generator(user_id: str):
     payload = {
         "sub": user_id,
         "iat": now,
-        "exp": now + timedelta(minutes=30)
+        "exp": now + timedelta(hours = 5)
     }
 
     return jwt.encode(payload, jwt_secret, algorithm="HS256")
+
+async def get_coordinates(address):
+    url = "https://nominatim.openstreetmap.org/search"
+
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            url,
+            params={
+                "q": address,
+                "format": "jsonv2",
+                "limit": 1
+            },
+            headers={
+                "User-Agent": "ParkNest/1.0"
+            },
+            timeout=15
+        )
+
+    if response.status_code != 200:
+        raise HTTPException(
+            status_code=502,
+            detail="Address lookup service unavailable"
+        )
+
+    results = response.json()
+
+    if not results:
+        raise HTTPException(
+            status_code=400,
+            detail="Address not found. Enter a more specific address."
+        )
+
+    return str(results[0]["lat"]), str(results[0]["lon"])
 
 
 def token_verifier(token: str = Depends(oauth2_scheme)):
@@ -102,7 +135,7 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
             raise HTTPException(status_code=401, detail="Invalid token")
 
     except JWTError:
-        raise HTTPException(status_code=401, detail="Invalid or expired token")
+        raise HTTPException(status_code=401, detail="Please login again")
 
     current_user = users.find_one({"_id": ObjectId(user_id)})
 

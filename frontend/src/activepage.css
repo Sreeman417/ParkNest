@@ -1,3 +1,4 @@
+
 @import "leaflet/dist/leaflet.css";
 
 * {
@@ -57,7 +58,6 @@
     left: 50%;
     transform: translateX(-50%);
 }
-
 
 .dashboard_page #dashboard_txt img {
     display: block;
@@ -180,8 +180,7 @@
 .add_land_card,
 .mybookings_card,
 .mylands_card,
-.profile_card,
-.logout_card {
+.profile_card {
     margin: 24px 0;
 }
 
@@ -189,8 +188,7 @@
 .add_land_card h1,
 .mybookings_card h1,
 .mylands_card h1,
-.profile_card h1,
-.logout_card h1 {
+.profile_card h1 {
     margin: 0 0 24px;
     font-size: 28px;
     color: #172033;
@@ -764,13 +762,116 @@
     overflow-wrap: anywhere;
 }
 
-.logout_card {
-    text-align: center;
+.logout_page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 75vh;
 }
 
-.logout_card img {
-    display: block;
+.logout_card {
+    width: 100%;
+    max-width: 480px;
+    margin: 0;
+    padding: 32px 30px;
+    text-align: center;
+    border-radius: 24px;
+}
+
+.logout_icon_box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
     margin: 0 auto 20px;
+    border-radius: 22px;
+    background: #eaf3ff;
+}
+
+.logout_icon_box img {
+    width: 44px;
+    height: 44px;
+    margin: 0;
+    object-fit: contain;
+}
+
+.logout_eyebrow {
+    color: #087fe7;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.logout_card h1 {
+    margin: 12px 0;
+    color: #172033;
+    font-size: 28px;
+}
+
+.logout_card p {
+    max-width: 360px;
+    margin: 0 auto;
+    color: #68758c;
+    line-height: 1.6;
+}
+
+.logout_actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.logout_actions button {
+    position: relative;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 12px 36px;
+    border: none;
+    border-radius: 12px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.logout_actions button img {
+    position: absolute;
+    left: 14px;
+    width: 19px;
+    height: 19px;
+    margin: 0;
+    object-fit: contain;
+}
+
+.logout_cancel {
+    background: #eaf3ff;
+    color: #087fe7;
+}
+
+.logout_cancel:hover {
+    background: #d9eaff;
+    transform: translateY(-2px);
+}
+
+.logout_confirm {
+    background: #e54848;
+    color: #fff;
+}
+
+.logout_confirm:hover {
+    background: #c83232;
+    transform: translateY(-2px);
+}
+
+.logout_footer {
+    display: block;
+    margin-top: 22px;
+    color: #8b95a5;
+    font-size: 12px;
 }
 
 @media (max-width: 1000px) {
@@ -888,6 +989,14 @@
     .page_intro h1 {
         font-size: 28px;
     }
+
+    .logout_card {
+        padding: 28px 20px;
+    }
+
+    .logout_actions {
+        flex-direction: column;
+    }
 }
 
 @media (max-width: 400px) {
@@ -917,12 +1026,15 @@
         transition-duration: 0.01ms !important;
     }
 }
+
 .dark-mode .page_shell,
 .dark-mode .page_intro h1,
 .dark-mode .page_intro h2,
 .dark-mode .section_heading h2,
 .dark-mode .section_heading p,
-.dark-mode .map_legend {
+.dark-mode .map_legend,
+[data-theme="dark"] .page_intro h1,
+[data-theme="dark"] .section_heading h2 {
     color: #f5f5f5;
 }
 
@@ -936,7 +1048,20 @@
 .dark-mode .property_card,
 .dark-mode .booking_item,
 .dark-mode .utility_chip,
-.dark-mode .empty_results {
+.dark-mode .empty_results,
+.dark-mode .logout_card,
+[data-theme="dark"] .availablespace,
+[data-theme="dark"] .mybookings,
+[data-theme="dark"] .mylands,
+[data-theme="dark"] .find_parking_card,
+[data-theme="dark"] .form_card,
+[data-theme="dark"] .calendar_card,
+[data-theme="dark"] .parking_card,
+[data-theme="dark"] .property_card,
+[data-theme="dark"] .booking_item,
+[data-theme="dark"] .utility_chip,
+[data-theme="dark"] .empty_results,
+[data-theme="dark"] .logout_card {
     background: #252a2b;
     color: #f5f5f5;
     border-color: #3a4143;
@@ -954,63 +1079,8 @@
 .dark-mode .form_card h3,
 .dark-mode .calendar_card h2,
 .dark-mode .booking_details h3,
-.dark-mode .utility_chip strong {
-    color: #f5f5f5;
-}
-
-.dark-mode .availablespace p,
-.dark-mode .mybookings p,
-.dark-mode .mylands p,
-.dark-mode .parking_card p,
-.dark-mode .property_card p,
-.dark-mode .booking_details p,
-.dark-mode .utility_chip span,
-.dark-mode .muted_text,
-.dark-mode .demo_note {
-    color: #b0bacb;
-}
-
-.dark-mode .parking_search input,
-.dark-mode .parking_search select,
-.dark-mode .form_card input,
-.dark-mode .form_card select,
-.dark-mode .form_card textarea,
-.dark-mode .calendar_card input {
-    background: #1b1f20;
-    color: #f5f5f5;
-    border-color: #41494c;
-}
-
-.dark-mode .form_card label,
-.dark-mode .calendar_card label {
-    color: #d5dbea;
-}
-
-.dark-mode .booking_estimate,
-.dark-mode .calendar_summary {
-    background: #30383b;
-    color: #d5dbea;
-}
-
-.dark-mode .profile_banner {
-    border-color: #3a4143;
-}
-[data-theme="dark"] .availablespace,
-[data-theme="dark"] .mybookings,
-[data-theme="dark"] .mylands,
-[data-theme="dark"] .find_parking_card,
-[data-theme="dark"] .form_card,
-[data-theme="dark"] .calendar_card,
-[data-theme="dark"] .parking_card,
-[data-theme="dark"] .property_card,
-[data-theme="dark"] .booking_item,
-[data-theme="dark"] .utility_chip,
-[data-theme="dark"] .empty_results {
-    background: #252a2b;
-    color: #f5f5f5;
-    border-color: #3a4143;
-}
-
+.dark-mode .utility_chip strong,
+.dark-mode .logout_card h1,
 [data-theme="dark"] .availablespace h1,
 [data-theme="dark"] .mybookings h1,
 [data-theme="dark"] .mylands h1,
@@ -1023,15 +1093,21 @@
 [data-theme="dark"] .form_card h3,
 [data-theme="dark"] .calendar_card h2,
 [data-theme="dark"] .booking_details h3,
-[data-theme="dark"] .utility_chip strong {
+[data-theme="dark"] .utility_chip strong,
+[data-theme="dark"] .logout_card h1 {
     color: #f5f5f5;
 }
 
-[data-theme="dark"] .page_intro h1,
-[data-theme="dark"] .section_heading h2 {
-    color: #f5f5f5;
-}
-
+.dark-mode .availablespace p,
+.dark-mode .mybookings p,
+.dark-mode .mylands p,
+.dark-mode .parking_card p,
+.dark-mode .property_card p,
+.dark-mode .booking_details p,
+.dark-mode .utility_chip span,
+.dark-mode .muted_text,
+.dark-mode .demo_note,
+.dark-mode .logout_card p,
 [data-theme="dark"] .page_intro p,
 [data-theme="dark"] .section_heading p,
 [data-theme="dark"] .parking_card p,
@@ -1039,10 +1115,17 @@
 [data-theme="dark"] .booking_details p,
 [data-theme="dark"] .utility_chip span,
 [data-theme="dark"] .muted_text,
-[data-theme="dark"] .demo_note {
+[data-theme="dark"] .demo_note,
+[data-theme="dark"] .logout_card p {
     color: #b0bacb;
 }
 
+.dark-mode .parking_search input,
+.dark-mode .parking_search select,
+.dark-mode .form_card input,
+.dark-mode .form_card select,
+.dark-mode .form_card textarea,
+.dark-mode .calendar_card input,
 [data-theme="dark"] .parking_search input,
 [data-theme="dark"] .parking_search select,
 [data-theme="dark"] .form_card input,
@@ -1054,17 +1137,83 @@
     border-color: #41494c;
 }
 
+.dark-mode .form_card label,
+.dark-mode .calendar_card label,
 [data-theme="dark"] .form_card label,
 [data-theme="dark"] .calendar_card label {
     color: #d5dbea;
 }
 
+.dark-mode .booking_estimate,
+.dark-mode .calendar_summary,
 [data-theme="dark"] .booking_estimate,
 [data-theme="dark"] .calendar_summary {
     background: #30383b;
     color: #d5dbea;
 }
 
+.dark-mode .profile_banner,
 [data-theme="dark"] .profile_banner {
     border-color: #3a4143;
+}
+
+.dark-mode .eyebrow,
+.dark-mode .parking_price,
+.dark-mode .property_price,
+.dark-mode .text_btn,
+.dark-mode .calendar_icon,
+.dark-mode .booking_estimate strong,
+.dark-mode .calendar_summary strong,
+[data-theme="dark"] .eyebrow,
+[data-theme="dark"] .parking_price,
+[data-theme="dark"] .property_price,
+[data-theme="dark"] .text_btn,
+[data-theme="dark"] .calendar_icon,
+[data-theme="dark"] .booking_estimate strong,
+[data-theme="dark"] .calendar_summary strong {
+    color: #66b5ff !important;
+}
+
+.dark-mode .secondary_btn,
+[data-theme="dark"] .secondary_btn {
+    background: #263e55;
+    color: #80c4ff;
+}
+
+.dark-mode .map_legend,
+[data-theme="dark"] .map_legend {
+    color: #d5dbea;
+}
+
+.dark-mode .form_card .check_option,
+[data-theme="dark"] .form_card .check_option {
+    background: #30383b;
+    border-color: #41494c;
+    color: #f5f5f5;
+}
+
+.dark-mode .form_card .check_option label,
+[data-theme="dark"] .form_card .check_option label {
+    color: #f5f5f5;
+}
+
+.dark-mode .form_card .check_option input,
+[data-theme="dark"] .form_card .check_option input {
+    accent-color: #66b5ff;
+}
+
+.dark-mode .logout_icon_box,
+[data-theme="dark"] .logout_icon_box {
+    background: #263e55;
+}
+
+.dark-mode .logout_cancel,
+[data-theme="dark"] .logout_cancel {
+    background: #263e55;
+    color: #80c4ff;
+}
+
+.dark-mode .logout_footer,
+[data-theme="dark"] .logout_footer {
+    color: #9ba8b8;
 }
