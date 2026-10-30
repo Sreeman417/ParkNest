@@ -1025,6 +1025,13 @@
         animation-duration: 0.01ms !important;
         transition-duration: 0.01ms !important;
     }
+
+    aside {
+        transition-duration: 500ms !important;
+    }
+    button[data-menu-button] {
+        transition-duration: 500ms !important;
+    }
 }
 
 .dark-mode .page_shell,

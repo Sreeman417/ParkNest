@@ -76,27 +76,6 @@ body {
     margin: 0;
 }
 
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 300px;
-    height: 100vh;
-    padding: 25px 18px 20px;
-    background-color: var(--card-bg, #ffffff);
-    color: var(--text-color, #172033);
-    box-shadow: 5px 0 25px rgba(0, 0, 0, 0.12);
-    transform: translateX(-100%) !important;
-    transition: transform 0.4s ease !important;
-    will-change: transform;
-    z-index: 100;
-    overflow-y: auto;
-}
-
-.sidebar.active {
-    transform: translateX(0) !important;
-}
-
 .sidebar_btn {
     display: flex;
     align-items: center;
@@ -163,16 +142,6 @@ body {
     }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .sidebar,
-    .menu_btn,
-    .sidebar_btn,
-    .sidebar_btn img,
-    .page_transition {
-        transition: none;
-        animation: none;
-    }
-}
 .sidebar_btn.selected {
     background: #e6f2ff;
     color: #087fe7;
@@ -265,3 +234,4 @@ body {
 [data-theme="dark"] .logout_popup p {
     color: #b0bacb;
 }
+

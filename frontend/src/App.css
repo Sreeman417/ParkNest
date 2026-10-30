@@ -861,15 +861,6 @@ a {
     }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .sidebar_btn,
-    .sidebar_btn img,
-    .page_transition {
-        transition: none;
-        animation: none;
-    }
-}
-
 .sidebar {
     transition: transform 500ms ease-in-out !important;
 }
@@ -894,10 +885,4 @@ a {
 .dark-mode label {
     color: #f5f5f5;
 }
-@media (prefers-reduced-motion: reduce) {
-    aside.sidebar {
-        transition-property: transform !important;
-        transition-duration: 500ms !important;
-        transition-timing-function: ease-in-out !important;
-    }
-}
+

@@ -1,6 +1,4 @@
-
 import land from "../assets/land-plot.png";
-import "../activepage.css";
 import { useEffect, useState } from "react";
 import Map from "./map.jsx";
 
@@ -8,13 +6,15 @@ function MyLands() {
     const [lands, setLands] = useState([]);
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState("");
+    const [search, setSearch] = useState("");
+    const [filter, setFilter] = useState("All Properties");
 
     useEffect(() => {
         const fetchMyLands = async () => {
             try {
                 const response = await fetch("http://127.0.0.1:8000/my_lands", {
                     headers: {
-                        "Authorization": `Bearer ${localStorage.getItem("token")}`
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
                     }
                 });
 
@@ -39,70 +39,377 @@ function MyLands() {
         fetchMyLands();
     }, []);
 
+    const filteredLands = lands.filter(item => {
+        const matchesSearch = [
+            item.title,
+            item.address,
+            item.area
+        ].some(value =>
+            String(value || "").toLowerCase().includes(search.toLowerCase())
+        );
+
+        const matchesFilter =
+            filter === "All Properties" ||
+            String(item.type || "").toLowerCase() === filter.toLowerCase();
+
+        return matchesSearch && matchesFilter;
+    });
+
+    const totalSlots = lands.reduce(
+        (total, item) => total + (Number(item.slots) || 0),
+        0
+    );
+
+    const averagePrice = lands.length
+        ? lands.reduce((total, item) => total + (Number(item.price) || 0), 0) / lands.length
+        : 0;
+
     return (
-        <div className="page_shell">
-            <div className="page_intro">
-                <span className="eyebrow">PROPERTY MANAGEMENT</span>
-                <h1>My properties</h1>
-                <p>Review your listed parking lands, rates and basic utilities.</p>
-            </div>
+        <div className="mx-auto w-full max-w-7xl space-y-8 text-slate-900 dark:text-slate-100">
+            <section className="space-y-3">
+                <div className="flex flex-wrap items-center gap-2">
+                    <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-700 dark:bg-blue-500/10 dark:text-blue-400">
+                        <span className="h-2 w-2 rounded-full bg-blue-500" />
+                        Host management portal
+                    </span>
 
-            {loading ? (
-                <div className="empty_results">Loading properties...</div>
-            ) : message ? (
-                <div className="empty_results">{message}</div>
-            ) : lands.length ? (
-                <div className="property_grid">
-                    {lands.map(item => (
-                        <article className="property_card" key={item._id}>
-                            <div className="property_card_top">
-                                <img src={land} alt="" />
-                                <span className="parking_badge">
-                                    {item.slots} spaces
-                                </span>
-                            </div>
+                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        Property management
+                    </span>
+                </div>
 
-                            <h2>{item.title}</h2>
-                            <p>{item.address}</p>
+                <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
+                    My Lands & Properties
+                </h1>
 
-                            <p className="property_area">
-                                {item.area || "Land area not provided"}
-                            </p>
+                <p className="max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400 sm:text-base">
+                    Manage your listed parking properties, review available spaces, and keep track of your parking rates.
+                </p>
+            </section>
 
-                            <div className="property_price">
-                                ₹{item.price}/hour
-                            </div>
+            <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <div className="flex items-center justify-between">
+                        <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">
+                            Total properties
+                        </span>
+                        <span className="material-symbols-outlined rounded-xl bg-blue-50 p-2 text-xl text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
+                            apartment
+                        </span>
+                    </div>
 
-                            <div className="utility_tags">
-                                {(item.utilities || []).map(utility => (
-                                    <span key={utility}>{utility}</span>
-                                ))}
-                            </div>
+                    <p className="mt-5 text-3xl font-extrabold">
+                        {loading ? "—" : lands.length}
+                    </p>
 
-                            <button
-                                className="secondary_btn"
-                                onClick={() => window.dispatchEvent(
-                                    new CustomEvent("showPlaceOnMap", {
-                                        detail: {
-                                            lat: Number(item.latitude),
-                                            lng: Number(item.longitude),
-                                            name: item.title
-                                        }
-                                    })
-                                )}
+                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                        Your listed parking lands
+                    </p>
+                </article>
+
+                <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <div className="flex items-center justify-between">
+                        <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">
+                            Total parking spaces
+                        </span>
+                        <span className="material-symbols-outlined rounded-xl bg-emerald-50 p-2 text-xl text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">
+                            local_parking
+                        </span>
+                    </div>
+
+                    <p className="mt-5 text-3xl font-extrabold">
+                        {loading ? "—" : totalSlots}
+                    </p>
+
+                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                        Spaces across your properties
+                    </p>
+                </article>
+
+                <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <div className="flex items-center justify-between">
+                        <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">
+                            Average hourly rate
+                        </span>
+                        <span className="material-symbols-outlined rounded-xl bg-violet-50 p-2 text-xl text-violet-600 dark:bg-violet-500/10 dark:text-violet-400">
+                            currency_rupee
+                        </span>
+                    </div>
+
+                    <p className="mt-5 text-3xl font-extrabold">
+                        {loading ? "—" : `₹${averagePrice.toLocaleString("en-IN", { maximumFractionDigits: 2 })}`}
+                    </p>
+
+                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                        Average listed price per hour
+                    </p>
+                </article>
+
+                <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <div className="flex items-center justify-between">
+                        <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">
+                            Listed utilities
+                        </span>
+                        <span className="material-symbols-outlined rounded-xl bg-amber-50 p-2 text-xl text-amber-600 dark:bg-amber-500/10 dark:text-amber-400">
+                            electrical_services
+                        </span>
+                    </div>
+
+                    <p className="mt-5 text-3xl font-extrabold">
+                        {loading ? "—" : new Set(lands.flatMap(item => item.utilities || [])).size}
+                    </p>
+
+                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                        Distinct utilities offered
+                    </p>
+                </article>
+            </section>
+
+            <section className="space-y-5">
+                <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
+                    <div>
+                        <h2 className="text-2xl font-extrabold tracking-tight">
+                            Property inventory
+                        </h2>
+
+                        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                            View and locate your listed parking spaces.
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={() => window.dispatchEvent(new CustomEvent("navigateToAddLand"))}
+                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white shadow-md shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700 active:translate-y-0"
+                    >
+                        <span className="material-symbols-outlined text-xl">
+                            add_circle
+                        </span>
+                        Add New Land / Lot
+                    </button>
+                </div>
+
+                <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center dark:border-slate-800 dark:bg-slate-900">
+                    <div className="relative flex-1">
+                        <span className="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xl text-slate-400">
+                            search
+                        </span>
+
+                        <input
+                            type="search"
+                            value={search}
+                            onChange={event => setSearch(event.target.value)}
+                            placeholder="Search property or address..."
+                            className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-950"
+                        />
+                    </div>
+
+                    <select
+                        value={filter}
+                        onChange={event => setFilter(event.target.value)}
+                        className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold outline-none transition focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950"
+                    >
+                        <option>All Properties</option>
+                        {[...new Set(lands.map(item => item.type).filter(Boolean))].map(type => (
+                            <option key={type}>{type}</option>
+                        ))}
+                    </select>
+                </div>
+
+                {loading ? (
+                    <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                        {[1, 2].map(item => (
+                            <div
+                                key={item}
+                                className="animate-pulse rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900"
                             >
-                                Show on map
-                            </button>
-                        </article>
-                    ))}
-                </div>
-            ) : (
-                <div className="empty_results">
-                    You haven't added any properties yet.
-                </div>
-            )}
+                                <div className="h-24 w-24 rounded-xl bg-slate-200 dark:bg-slate-800" />
+                                <div className="mt-5 h-5 w-2/3 rounded bg-slate-200 dark:bg-slate-800" />
+                                <div className="mt-3 h-4 w-full rounded bg-slate-100 dark:bg-slate-800" />
+                                <div className="mt-5 h-10 w-1/3 rounded bg-slate-200 dark:bg-slate-800" />
+                            </div>
+                        ))}
+                    </div>
+                ) : message ? (
+                    <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/30 dark:text-red-300">
+                        <div className="flex items-start gap-3">
+                            <span className="material-symbols-outlined">error</span>
+                            <div>
+                                <p className="font-bold">Could not load properties</p>
+                                <p className="mt-1">{message}</p>
+                            </div>
+                        </div>
+                    </div>
+                ) : filteredLands.length ? (
+                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                        {filteredLands.map(item => (
+                            <article
+                                key={item._id}
+                                className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg sm:p-6 dark:border-slate-800 dark:bg-slate-900"
+                            >
+                                <div className="space-y-5">
+                                    <div className="flex items-start justify-between gap-4">
+                                        <div className="flex min-w-0 items-center gap-4">
+                                            <div className="h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800">
+                                                <img
+                                                    src={land}
+                                                    alt="Parking property"
+                                                    className="h-full w-full object-cover"
+                                                />
+                                            </div>
 
-            <Map />
+                                            <div className="min-w-0">
+                                                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">
+                                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                                                    Listed property
+                                                </span>
+
+                                                <h3 className="mt-2 break-words text-lg font-bold">
+                                                    {item.title}
+                                                </h3>
+
+                                                <p className="mt-1 flex items-start gap-1 text-sm leading-5 text-slate-500 dark:text-slate-400">
+                                                    <span className="material-symbols-outlined mt-0.5 text-base">
+                                                        location_on
+                                                    </span>
+                                                    <span className="break-words">{item.address}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-3 gap-2 rounded-xl bg-slate-50 p-3 sm:gap-3 sm:p-4 dark:bg-slate-800/70">
+                                        <div className="min-w-0">
+                                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 sm:text-xs dark:text-slate-400">
+                                                Spaces
+                                            </span>
+
+                                            <p className="mt-1 break-words text-lg font-extrabold sm:text-xl">
+                                                {item.slots ?? "—"}
+                                            </p>
+
+                                            <span className="text-xs text-slate-500 dark:text-slate-400">
+                                                Total
+                                            </span>
+                                        </div>
+
+                                        <div className="min-w-0 border-x border-slate-200 px-2 dark:border-slate-700 sm:px-3">
+                                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 sm:text-xs dark:text-slate-400">
+                                                Rate
+                                            </span>
+
+                                            <p className="mt-1 break-words text-lg font-extrabold text-blue-600 sm:text-xl dark:text-blue-400">
+                                                ₹{item.price}
+                                            </p>
+
+                                            <span className="text-xs text-slate-500 dark:text-slate-400">
+                                                Per hour
+                                            </span>
+                                        </div>
+
+                                        <div className="min-w-0">
+                                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 sm:text-xs dark:text-slate-400">
+                                                Area
+                                            </span>
+
+                                            <p className="mt-1 break-words text-sm font-bold sm:text-base">
+                                                {item.area || "Not provided"}
+                                            </p>
+
+                                            <span className="text-xs text-slate-500 dark:text-slate-400">
+                                                Land size
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                            Available utilities
+                                        </p>
+
+                                        <div className="flex flex-wrap gap-2">
+                                            {(item.utilities || []).length ? (
+                                                item.utilities.map(utility => (
+                                                    <span
+                                                        key={utility}
+                                                        className="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-2.5 py-1.5 text-xs font-semibold text-blue-700 dark:bg-blue-500/10 dark:text-blue-300"
+                                                    >
+                                                        <span className="material-symbols-outlined text-sm">
+                                                            check_circle
+                                                        </span>
+                                                        {utility}
+                                                    </span>
+                                                ))
+                                            ) : (
+                                                <span className="text-sm text-slate-400">
+                                                    No utilities listed
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-5 dark:border-slate-800">
+                                    <span className="text-xs text-slate-500 dark:text-slate-400">
+                                        Property ID: {String(item._id).slice(-8)}
+                                    </span>
+
+                                    <button
+                                        type="button"
+                                        onClick={() => window.dispatchEvent(
+                                            new CustomEvent("showPlaceOnMap", {
+                                                detail: {
+                                                    lat: Number(item.latitude),
+                                                    lng: Number(item.longitude),
+                                                    name: item.title
+                                                }
+                                            })
+                                        )}
+                                        className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-blue-600 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-blue-500 dark:hover:text-white"
+                                    >
+                                        <span className="material-symbols-outlined text-lg">
+                                            map
+                                        </span>
+                                        Show on map
+                                    </button>
+                                </div>
+                            </article>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-14 text-center dark:border-slate-700 dark:bg-slate-900">
+                        <span className="material-symbols-outlined text-5xl text-slate-400">
+                            {lands.length ? "search_off" : "location_city"}
+                        </span>
+
+                        <h3 className="mt-4 text-lg font-bold">
+                            {lands.length ? "No matching properties" : "No properties yet"}
+                        </h3>
+
+                        <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500 dark:text-slate-400">
+                            {lands.length
+                                ? "Try changing your search or property filter."
+                                : "Once you add a parking property, its location, hourly rate, spaces and utilities will appear here."}
+                        </p>
+                    </div>
+                )}
+            </section>
+
+            <section className="space-y-4">
+                <div>
+                    <h2 className="text-2xl font-extrabold tracking-tight">
+                        Property locations
+                    </h2>
+
+                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                        Select Show on map on a property card to locate it.
+                    </p>
+                </div>
+
+                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <Map />
+                </div>
+            </section>
         </div>
     );
 }

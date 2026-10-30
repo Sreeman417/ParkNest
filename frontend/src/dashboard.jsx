@@ -1,5 +1,6 @@
 
 import { useState, useEffect, useRef } from "react";
+import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import list from "./assets/list.png";
 import home from "./assets/home.png";
 import magnifying_glass from "./assets/magnifying-glass.png";
@@ -10,13 +11,16 @@ import userdash from "./assets/user_dash.png";
 import turnoff from "./assets/turn-off.png";
 import parknest from "./assets/parknest.png";
 import Carddisp from "./activepage.jsx";
-import { useLocation } from "react-router-dom";
 
 function Dashboard() {
     const [sidebar, setSidebar] = useState(false);
-    const [activepage, setactivepage] = useState("dashboard");
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
     const sidebarRef = useRef(null);
+
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const currentPage = location.pathname.split("/").filter(Boolean)[1] || "dashboard";
 
     function toggleSidebar() {
         setSidebar(prev => !prev);
@@ -43,17 +47,17 @@ function Dashboard() {
 
     const navigationItems = [
         { id: "dashboard", label: "Dashboard", icon: home },
-        { id: "find_parking", label: "Find Parking", icon: magnifying_glass },
-        { id: "add_land", label: "Add Land", icon: add },
+        { id: "findparking", label: "Find Parking", icon: magnifying_glass },
+        { id: "addland", label: "Add Land", icon: add },
         { id: "mybookings", label: "My Bookings", icon: book },
         { id: "mylands", label: "My Lands", icon: land },
         { id: "profile", label: "Profile", icon: userdash }
     ];
 
-    const handleNavigation = (page) => {
-        setactivepage(page);
+    const handleNavigation = page => {
+        navigate(page === "dashboard" ? "/dashboard" : `/dashboard/${page}`);
         setSidebar(false);
-    };
+    };  
 
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
@@ -64,8 +68,8 @@ function Dashboard() {
                 aria-label={sidebar ? "Close sidebar" : "Open sidebar"}
                 aria-expanded={sidebar}
                 style={{
-                    transform: sidebar ? "translateX(230px)" : "translateX(0)",
-                    transition: "transform 500ms ease-in-out"
+                    left: sidebar ? "calc(18rem + 1.25rem)" : "1.25rem",
+                    transition: "left 500ms ease-in-out"
                 }}
                 className="fixed left-5 top-5 z-[60] flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-md hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800"
             >
@@ -89,10 +93,11 @@ function Dashboard() {
             <aside
                 ref={sidebarRef}
                 style={{
-                    transform: sidebar ? "translateX(0)" : "translateX(-100%)",
-                    transition: "transform 500ms ease-in-out"
+                    transform: sidebar ? "translate3d(0, 0, 0)" : "translate3d(-100%, 0, 0)",
+                    transition: "transform 500ms ease-in-out",
+                    willChange: "transform"
                 }}
-                className="sidebar fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-blue-100 bg-blue-50 px-5 py-7 text-slate-800 shadow-2xl dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+                className="fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-blue-100 bg-blue-50 px-5 py-7 text-slate-800 shadow-2xl dark:border-slate-700 dark:bg-slate-900 dark:text-white"
             >
                 <div className="mb-10 flex items-center gap-3 px-2">
                     <img
@@ -105,7 +110,6 @@ function Dashboard() {
                         <h1 className="text-xl font-bold tracking-tight">
                             ParkNest
                         </h1>
-
                         <p className="text-xs text-slate-500 dark:text-slate-400">
                             Parking made simple
                         </p>
@@ -117,13 +121,13 @@ function Dashboard() {
                 </p>
 
                 <nav className="flex flex-1 flex-col gap-2">
-                    {navigationItems.map((item) => (
+                    {navigationItems.map(item => (
                         <button
                             key={item.id}
                             type="button"
                             onClick={() => handleNavigation(item.id)}
                             className={`group flex w-full items-center gap-4 rounded-xl px-4 py-3.5 text-left text-sm font-semibold transition duration-200 ${
-                                activepage === item.id
+                                currentPage === item.id
                                     ? "bg-blue-600 text-white shadow-lg shadow-blue-200 dark:shadow-blue-950/40"
                                     : "text-slate-700 hover:bg-blue-100 hover:text-blue-700 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
                             }`}
@@ -132,15 +136,13 @@ function Dashboard() {
                                 src={item.icon}
                                 alt=""
                                 className={`h-6 w-6 shrink-0 object-contain ${
-                                    activepage === item.id
-                                        ? "brightness-0 invert"
-                                        : ""
+                                    currentPage === item.id ? "brightness-0 invert" : ""
                                 }`}
                             />
 
                             <span>{item.label}</span>
 
-                            {activepage === item.id && (
+                            {currentPage === item.id && (
                                 <span className="ml-auto h-2 w-2 rounded-full bg-white" />
                             )}
                         </button>
@@ -158,7 +160,6 @@ function Dashboard() {
                             alt=""
                             className="h-6 w-6 shrink-0 object-contain"
                         />
-
                         <span>Logout</span>
                     </button>
                 </div>
@@ -166,10 +167,7 @@ function Dashboard() {
 
             <div className="min-h-screen">
                 <div className="min-h-screen px-5 pb-8 pt-20 sm:px-8 lg:px-10">
-                    <Carddisplayer
-                        page={activepage}
-                        setactivepage={setactivepage}
-                    />
+                    <Outlet />
                 </div>
             </div>
 
@@ -177,11 +175,7 @@ function Dashboard() {
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/60 px-5 backdrop-blur-sm">
                     <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-7 shadow-2xl dark:border-slate-700 dark:bg-slate-900">
                         <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-red-100 dark:bg-red-500/10">
-                            <img
-                                src={turnoff}
-                                alt=""
-                                className="h-7 w-7 object-contain"
-                            />
+                            <img src={turnoff} alt="" className="h-7 w-7 object-contain" />
                         </div>
 
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white">
@@ -206,7 +200,7 @@ function Dashboard() {
                                 onClick={() => {
                                     setShowLogoutConfirm(false);
                                     setSidebar(false);
-                                    setactivepage("logout");
+                                    navigate("/login");
                                 }}
                                 className="flex-1 rounded-xl bg-red-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-red-700"
                             >
@@ -216,20 +210,6 @@ function Dashboard() {
                     </div>
                 </div>
             )}
-        </div>
-    );
-}
-
-function Carddisplayer(props) {
-    const location = useLocation();
-
-    return (
-        <div className="animate-[fadeIn_0.3s_ease-out]">
-            <Carddisp
-                page={props.page}
-                setactivepage={props.setactivepage}
-                name={location.state?.name}
-            />
         </div>
     );
 }

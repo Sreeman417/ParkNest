@@ -1,11 +1,19 @@
-
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import Login_card from "./login.jsx";
 import Signup_card from "./sign_up.jsx";
 import Dashboard from "./dashboard.jsx";
 import ThemeToggle from "./ThemeToggle";
 import ThemeProvider from "./ThemeContext";
 import mail from "./assets/mail.png";
+import Carddisp from "./activepage.jsx";
+
+
+function ProtectedRoute() {
+    const token = localStorage.getItem("token");
+    console.log("ProtectedRoute token:", token);
+
+    return token ? <Outlet /> : <Navigate to="/login" replace />;
+}
 
 function App() {
     return (
@@ -19,10 +27,21 @@ function App() {
                 </div>
 
                 <Routes>
-                    <Route path="/" element={<Navigate to="/login" replace />} />
                     <Route path="/login" element={<Login_card />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/signup" element={<Signup_card />} />
+
+                    <Route element={<ProtectedRoute />}>
+                        <Route path="/dashboard" element={<Dashboard />}>
+                            <Route index element={<Carddisp page="dashboard" />} />
+                            <Route path="profile" element={<Carddisp page="profile" />} />
+                            <Route path="mylands" element={<Carddisp page="mylands" />} />
+                            <Route path="addland" element={<Carddisp page="addland" />} />
+                            <Route path="mybookings" element={<Carddisp page="mybookings" />} />
+                            <Route path="findparking" element={<Carddisp page="findparking" />} />
+                        </Route>
+                    </Route>
+
+                    <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>
             </BrowserRouter>
         </ThemeProvider>

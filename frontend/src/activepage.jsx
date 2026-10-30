@@ -1,53 +1,44 @@
-import "./activepage.css";
-import { useEffect, useState } from "react";
+
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ResetPageScroll from "./activepagecomps/resetPageScroll.jsx";
 
-
 import FindParking from "./activepagecomps/findparking.jsx";
-
 import Dashboard_main from "./activepagecomps/dashboard_main.jsx";
-
 import MyBookings from "./activepagecomps/mybookings.jsx";
-
-import AddLand from "./activepagecomps/addland.jsx"; 
-
+import AddLand from "./activepagecomps/addland.jsx";
 import MyLands from "./activepagecomps/mylands.jsx";
-
 import Profile from "./activepagecomps/profile.jsx";
 
-import Logout from "./activepagecomps/logout.jsx";
+function Carddisp({ page }) {
+    const navigate = useNavigate();
 
-function Carddisp(props) {
     useEffect(() => {
         ResetPageScroll();
-    }, [props.page]);
+    }, [page]);
 
-    if (props.page === "dashboard") {
-        return <Dashboard_main setactivepage={props.setactivepage} name={props.name} />;
+    if (page === "dashboard") {
+        return <Dashboard_main setactivepage={value => navigate(`/dashboard/${value === "dashboard" ? "" : value === "add_land" ? "addland" : value === "find_parking" ? "findparking" : value}`)} />;
     }
 
-    if (props.page === "find_parking") {
+    if (page === "findparking") {
         return <FindParking />;
     }
 
-    if (props.page === "add_land") {
-        return <AddLand setactivepage={props.setactivepage} />;
+    if (page === "addland") {
+        return <AddLand setactivepage={value => navigate(`/dashboard/${value === "mylands" ? "mylands" : value}`)} />;
     }
 
-    if (props.page === "mybookings") {
+    if (page === "mybookings") {
         return <MyBookings />;
     }
 
-    if (props.page === "mylands") {
+    if (page === "mylands") {
         return <MyLands />;
     }
 
-    if (props.page === "profile") {
-        return <Profile name={props.name} />;
-    }
-
-    if (props.page === "logout") {
-        return <Logout />;
+    if (page === "profile") {
+        return <Profile />;
     }
 
     return null;

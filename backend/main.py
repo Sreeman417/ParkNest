@@ -10,7 +10,7 @@ from datetime import datetime, timedelta, timezone
 import re
 import secrets
 from modules import *
-
+from pymongo.errors import PyMongoError
 
 class userdata(BaseModel):
     name: str
@@ -62,9 +62,10 @@ db = client["parknest"]
 users = db["users"]
 profile = db["profile"]
 otp_db = db["otp"]
+otp_db.create_index("expiry", expireAfterSeconds=0)
 lands_db = db["lands"]
 passwordhash = PasswordHash.recommended()
-
+profile.create_index("email", unique=True)
 
 @app.get("/")
 async def root():
@@ -172,16 +173,10 @@ def handle_password(data: password_data):
     })
 
     if not verification:
-        raise HTTPException(
-            status_code=403,
-            detail="Verify your email first"
-        )
+        raise HTTPException(status_code=403, detail="Verify your email first")
 
     if users.find_one({"email": email}):
-        raise HTTPException(
-            status_code=409,
-            detail="Account already exists"
-        )
+        raise HTTPException(status_code=409, detail="Account already exists")
 
     if not password_checker(data.password):
         raise HTTPException(
@@ -189,12 +184,10 @@ def handle_password(data: password_data):
             detail="Enter valid password (special character, uppercase, number, more than 8 characters)"
         )
 
-    users.insert_one({
-        "email": email,
-        "password": passwordhash.hash(data.password)
-    })
-
-    otp_db.delete_many({"email": email})
+    otp_db.update_one(
+        {"email": email},
+        {"$set": {"password": passwordhash.hash(data.password)}}
+    )
 
     return {"detail": "ok"}
 
@@ -238,34 +231,30 @@ def handle_signup(data: signup_data):
     phone = data.phone.strip()
 
     if not name or not phone:
+        raise HTTPException(status_code=400, detail="Name and phone are required")
+
+    verification = otp_db.find_one({
+        "email": email,
+        "verified": True,
+        "expiry": {"$gt": datetime.now(timezone.utc)},
+        "password": {"$exists": True}
+    })
+
+    if not verification:
         raise HTTPException(
-            status_code=400,
-            detail="Name and phone are required"
+            status_code=403,
+            detail="Complete email verification and password setup first"
         )
 
-    curr_user = users.find_one({"email": email})
+    if users.find_one({"email": email}):
+        raise HTTPException(status_code=409, detail="Account already exists")
 
-    if not curr_user:
-        raise HTTPException(
-            status_code=404,
-            detail="User not found. Set your password first"
-        )
-
-    if profile.find_one({"email": email}):
-        raise HTTPException(
-            status_code=409,
-            detail="Account profile already exists"
-        )
-
-    users.update_one(
-        {"email": email},
-        {
-            "$set": {
-                "name": name,
-                "phone": phone
-            }
-        }
-    )
+    users.insert_one({
+        "email": email,
+        "password": verification["password"],
+        "name": name,
+        "phone": phone
+    })
 
     profile.insert_one({
         "email": email,
@@ -273,8 +262,9 @@ def handle_signup(data: signup_data):
         "phone": phone
     })
 
-    return {"detail": "ok"}
+    otp_db.delete_many({"email": email})
 
+    return {"detail": "ok"}
 
 class user_data(BaseModel):
     name: str
@@ -310,32 +300,74 @@ def save_profile(
     email = current_user["email"]
     phone = current_user.get("phone", "")
 
-    profile.update_one(
-        {"email": email},
-        {
-            "$set": {
-                "name": data.name,
-                "email": email,
-                "phone": phone,
-                "address": data.address,
-                "vehicle": data.vehicle,
-                "vehicel_no": data.vehicel_no,
-                "emergency_con": data.emergency_con,
-                "about_u": data.about_u
-            }
-        },
-        upsert=True
-    )
+    name = data.name.strip()
+    address = data.address.strip()
+    vehicle = data.vehicle.strip()
+    vehicel_no = data.vehicel_no.strip().upper()
+    emergency_con = data.emergency_con.strip()
+    about_u = data.about_u.strip()
 
-    users.update_one(
-        {"_id": current_user["_id"]},
-        {"$set": {"name": data.name}}
-    )
+    if not name:
+        raise HTTPException(status_code=400, detail="Name cannot be empty")
 
-    return {
-        "detail": "ok",
-        "message": "Profile saved successfully"
-    }
+    if len(name) > 100:
+        raise HTTPException(status_code=400, detail="Name is too long")
+
+    if len(address) > 300:
+        raise HTTPException(status_code=400, detail="Address is too long")
+
+    if vehicle not in ["Car", "Bike", "Scooter"]:
+        raise HTTPException(status_code=400, detail="Invalid vehicle type")
+
+    if vehicel_no and not re.fullmatch(
+        r"[A-Z]{2}\d{1,2}[A-Z]{0,3}\d{1,4}",
+        vehicel_no
+    ):
+        raise HTTPException(status_code=400, detail="Invalid vehicle number")
+
+    if emergency_con and not re.fullmatch(r"[6-9]\d{9}", emergency_con):
+        raise HTTPException(status_code=400, detail="Invalid emergency contact")
+
+    if len(about_u) > 500:
+        raise HTTPException(status_code=400, detail="About you is too long")
+
+    try:
+        profile.update_one(
+            {"email": email},
+            {
+                "$set": {
+                    "name": name,
+                    "email": email,
+                    "phone": phone,
+                    "address": address,
+                    "vehicle": vehicle,
+                    "vehicel_no": vehicel_no,
+                    "emergency_con": emergency_con,
+                    "about_u": about_u
+                }
+            },
+            upsert=True
+        )
+
+        result = users.update_one(
+            {"_id": current_user["_id"]},
+            {"$set": {"name": name}}
+        )
+
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        return {
+            "detail": "ok",
+            "message": "Profile saved successfully"
+        }
+
+    except PyMongoError:
+        raise HTTPException(
+            status_code=500,
+            detail="Database error while saving profile"
+        )
+
 
 class land(BaseModel):
     title: str
@@ -414,7 +446,6 @@ async def add_land(data: land, current_user: dict = Depends(get_current_user)):
             raise HTTPException(status_code=400, detail="Invalid location coordinates")
     else:
         latitude, longitude = await get_coordinates(address)
-
     new_land = {
         "email": email,
         "title": title,
