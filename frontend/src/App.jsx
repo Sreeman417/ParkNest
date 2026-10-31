@@ -6,12 +6,10 @@ import ThemeToggle from "./ThemeToggle";
 import ThemeProvider from "./ThemeContext";
 import mail from "./assets/mail.png";
 import Carddisp from "./activepage.jsx";
-
+import BookParking from "./activepagecomps/bookparking.jsx";
 
 function ProtectedRoute() {
     const token = localStorage.getItem("token");
-    console.log("ProtectedRoute token:", token);
-
     return token ? <Outlet /> : <Navigate to="/login" replace />;
 }
 
@@ -38,6 +36,7 @@ function App() {
                             <Route path="addland" element={<Carddisp page="addland" />} />
                             <Route path="mybookings" element={<Carddisp page="mybookings" />} />
                             <Route path="findparking" element={<Carddisp page="findparking" />} />
+                            <Route path="bookparking" element={<BookParking />} />
                         </Route>
                     </Route>
 

@@ -1,4 +1,4 @@
-
+import MapLegend from "./maplegend";
 import { useState } from "react";
 import Map from "./map.jsx";
 
@@ -18,7 +18,7 @@ function AddLand({ setactivepage }) {
     const [message, setMessage] = useState("");
     const [locationLoading, setLocationLoading] = useState(false);
     const [Loading, setLoading] = useState(false);
-
+    const [propertyDocument, setPropertyDocument] = useState(null);
     const update = event => {
         setForm(current => ({
             ...current,
@@ -151,6 +151,8 @@ function AddLand({ setactivepage }) {
                 latitude: "",
                 longitude: ""
             });
+            setPropertyDocument(null);
+            document.getElementById("property-document").value = "";
         } catch (error) {
             setMessage(error.message);
         } finally {
@@ -299,6 +301,63 @@ function AddLand({ setactivepage }) {
                                     className={`${inputClass} resize-y`}
                                 />
                             </label>
+                            <div className="sm:col-span-2">
+                            <label className={labelClass}>
+                                Property document
+                                <p className="mt-1 text-xs font-normal text-slate-500 dark:text-slate-400">
+                                    Upload a property ownership document or supporting proof.
+                                </p>
+                            </label>
+
+                            <div className="mt-2 rounded-xl border-2 border-dashed border-slate-300 p-5 transition hover:border-blue-500 dark:border-slate-700">
+                                <input
+                                    id="property-document"
+                                    type="file"
+                                    accept=".pdf,.jpg,.jpeg,.png"
+                                    onChange={event => setPropertyDocument(event.target.files[0] || null)}
+                                    className="hidden"
+                                />
+
+                                <label
+                                    htmlFor="property-document"
+                                    className="flex cursor-pointer flex-col items-center gap-2 text-center"
+                                >
+                                    <span className="material-symbols-outlined text-3xl text-blue-600 dark:text-blue-400">
+                                        upload_file
+                                    </span>
+                                    <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                                        Choose property document
+                                    </span>
+                                    <span className="text-xs text-slate-500 dark:text-slate-400">
+                                        PDF, JPG or PNG
+                                    </span>
+                                </label>
+
+                                {propertyDocument && (
+                                    <div className="mt-4 flex items-center justify-between rounded-lg bg-slate-100 p-3 dark:bg-slate-800">
+                                        <div className="flex min-w-0 items-center gap-2">
+                                            <span className="material-symbols-outlined text-blue-600">
+                                                description
+                                            </span>
+                                            <span className="truncate text-sm">
+                                                {propertyDocument.name}
+                                            </span>
+                                        </div>
+
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setPropertyDocument(null);
+                                                document.getElementById("property-document").value = "";
+                                            }}
+                                            className="ml-3 text-sm font-semibold text-red-500 hover:text-red-700"
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                         </div>
 
                         <div className="my-8 border-t border-slate-200 dark:border-slate-800" />
@@ -381,6 +440,7 @@ function AddLand({ setactivepage }) {
                             </div>
 
                             <div className="p-3">
+                                <MapLegend/>
                                 <Map />
                             </div>
                         </section>

@@ -1,16 +1,21 @@
 
-import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
 import { useEffect, useRef, useState } from "react";
+import { loadGoogleMaps } from "./googleMapsLoader";
 import "../activepage.css";
 
 function Map() {
-    const [location, setLocation] = useState({ lat: 11.0168, lng: 76.9558 });
+    const [location, setLocation] = useState({
+        lat: 11.0168,
+        lng: 76.9558
+    });
+
     const mapRef = useRef(null);
     const googleMap = useRef(null);
     const userMarker = useRef(null);
     const selectedMarker = useRef(null);
     const selectedPlace = useRef(null);
     const locationRef = useRef(location);
+    const markerClass = useRef(null);
 
     useEffect(() => {
         locationRef.current = location;
@@ -25,12 +30,18 @@ function Map() {
         if (!navigator.geolocation) return;
 
         navigator.geolocation.getCurrentPosition(
-            position => setLocation({
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            }),
+            position => {
+                setLocation({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                });
+            },
             () => {},
-            { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 60000
+            }
         );
     }, []);
 
@@ -38,26 +49,45 @@ function Map() {
         const handleShowPlace = event => {
             const place = event.detail;
 
-            if (!place || typeof place.lat !== "number" || typeof place.lng !== "number") return;
+            if (!place) return;
 
-            selectedPlace.current = place;
+            const lat = Number(place.lat);
+            const lng = Number(place.lng);
 
-            if (googleMap.current) {
-                const position = { lat: place.lat, lng: place.lng };
+            if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+            if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return;
 
-                googleMap.current.setCenter(position);
-                googleMap.current.setZoom(17);
+            const position = { lat, lng };
 
-                if (selectedMarker.current) {
-                    selectedMarker.current.position = position;
-                    selectedMarker.current.title = place.name || place.title || "Selected place";
-                }
+            selectedPlace.current = {
+                ...place,
+                lat,
+                lng
+            };
+
+            if (!googleMap.current || !markerClass.current) return;
+
+            googleMap.current.setCenter(position);
+            googleMap.current.setZoom(17);
+
+            if (selectedMarker.current) {
+                selectedMarker.current.position = position;
+                selectedMarker.current.title =
+                    place.name || place.title || "Selected land";
+            } else {
+                selectedMarker.current = new markerClass.current({
+                    map: googleMap.current,
+                    position,
+                    title: place.name || place.title || "Selected land"
+                });
             }
         };
 
         window.addEventListener("showPlaceOnMap", handleShowPlace);
 
-        return () => window.removeEventListener("showPlaceOnMap", handleShowPlace);
+        return () => {
+            window.removeEventListener("showPlaceOnMap", handleShowPlace);
+        };
     }, []);
 
     useEffect(() => {
@@ -65,18 +95,17 @@ function Map() {
 
         async function initMap() {
             try {
-                const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-
-                if (!apiKey) throw new Error("Add VITE_GOOGLE_MAPS_API_KEY to your .env file.");
-
-                setOptions({ key: apiKey, v: "weekly" });
-
-                const { Map: GoogleMap } = await importLibrary("maps");
-                const { AdvancedMarkerElement } = await importLibrary("marker");
+                const {
+                    Map: GoogleMap,
+                    AdvancedMarkerElement
+                } = await loadGoogleMaps();
 
                 if (cancelled || !mapRef.current) return;
 
+                markerClass.current = AdvancedMarkerElement;
+
                 const selected = selectedPlace.current;
+
                 const center = selected
                     ? { lat: selected.lat, lng: selected.lng }
                     : locationRef.current;
@@ -99,8 +128,11 @@ function Map() {
                 if (selected) {
                     selectedMarker.current = new AdvancedMarkerElement({
                         map: googleMap.current,
-                        position: { lat: selected.lat, lng: selected.lng },
-                        title: selected.name || selected.title || "Selected place"
+                        position: {
+                            lat: selected.lat,
+                            lng: selected.lng
+                        },
+                        title: selected.name || selected.title || "Selected land"
                     });
                 }
             } catch (error) {
@@ -124,13 +156,21 @@ function Map() {
             }
 
             googleMap.current = null;
+            markerClass.current = null;
         };
     }, []);
 
     return (
         <div className="map_section">
             <div className="map_legend">
-                <span><i className="legend_dot legend_user" /> Your location</span>
+                <span>
+                    <i className="legend_dot legend_user" />
+                    Your location
+                </span>
+                <span>
+                    <i className="legend_dot legend_selected" />
+                    Selected land
+                </span>
             </div>
 
             <div className="map_container">
@@ -138,7 +178,7 @@ function Map() {
             </div>
 
             <p className="demo_note">
-                Parking locations will appear here when real data becomes available.
+                Select a parking location to view it on the map.
             </p>
         </div>
     );

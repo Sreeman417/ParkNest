@@ -1224,3 +1224,6 @@
 [data-theme="dark"] .logout_footer {
     color: #9ba8b8;
 }
+.legend_selected {
+    background-color: #2563eb;
+}

@@ -1,4 +1,4 @@
-
+import MapLegend from "./maplegend";
 import { useEffect,useState } from "react";
 import available_space from "../assets/available_space.png";
 import mybookings from "../assets/mybookings.png";
@@ -210,6 +210,7 @@ function Dashboard_main({ setactivepage}) {
                     </div>
 
                     <div className="overflow-hidden rounded-xl bg-white shadow-md dark:bg-slate-900">
+                        <MapLegend />
                         <Map />
                     </div>
                 </section>
